@@ -1,0 +1,36 @@
+<div class="topnav">
+  <img src="../../../assets/images/speedyb-logo-mini.png" alt="SpeedyBarakoLogo" class="toolbar-logo">
+  <div class="additional-links">
+      <a class="active" style="font-size: small;" href="#home">Be Our Partner</a>
+      <a href="#news" style="font-size: small;">Help Center</a>
+      <!-- <mat-icon> search </mat-icon> -->
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="left-container">
+      <div class="image-container">
+          <img src="../../../assets/images/speedyb-logo.png" alt="SpeedyBarakoLogo" class="speedyb-logo">
+      </div>
+  </div>
+
+  <div class="right-container">
+      <div class="login-form">
+          <h1>Welcome back, Merchant!</h1>
+          <p>Merchant Sign-in: Take the Reins, Drive Success!</p>
+          <form #form="ngForm">
+              <input type="text" id="username" name="username" ngModel placeholder="Enter your username" [(ngModel)]="username" required>
+
+              <input type="password" id="password" name="password" ngModel placeholder="Enter your password" [(ngModel)]="password">
+
+              <button type="submit" (click)="login(form)">Login</button>
+              <div class="lost-acc">
+                  <p>Lost access to your account? </p><a href="#" class="reset-pass">Reset your password now.</a>
+              </div>
+          </form> 
+
+      </div>
+  </div>
+
+</div>
