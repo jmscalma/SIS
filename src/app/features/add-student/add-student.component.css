@@ -1,0 +1,404 @@
+/* .card{
+  display: flex;
+    align-items: baseline;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+} */
+
+#content {
+  width: 95%;
+  /* height: 95%; */
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+
+.flex{
+  display: flex;
+  flex-direction: column;
+}
+
+.table-container{
+  width: 100%;
+}
+
+.dropdown-field {
+  width: 250px; /* Adjust the width as needed */
+}
+
+::ng-deep .p-dropdown {
+  display: inline-flex;
+  cursor: pointer;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  width: 100%;
+}
+
+.flex-box{
+  display: flex;
+}
+
+::ng-deep .mat-sort-header-content{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  font-family: 'Inter var';
+}
+
+::ng-deep .mat-mdc-table {
+  min-width: 100%;
+  border: 0;
+  border-spacing: 0;
+  table-layout: auto;
+  white-space: normal;
+  background-color: var(--mat-table-background-color);
+  padding-top: 2%;
+}
+
+::ng-deep .mdc-data-table__cell{
+  box-sizing: border-box;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  font-family: 'Inter var';
+}
+
+::ng-deep .p-datatable-table {
+  border-spacing: 0px;
+  width: 100%;
+  min-width: 50rem;
+  padding-top: 3%;
+}
+
+::ng-deep .p-toolbars{
+  width: 100%;
+  padding-top: 2%;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+::ng-deep .p-toolbar {
+  border-radius: 6px;
+  gap: 0.5rem;
+}
+
+::ng-deep #toolbar{
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+::ng-deep .p-toolbar.p-component {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.card{
+  display: flex;
+  align-items: baseline;
+  flex-direction: row;
+  width: 100%;
+}
+
+.flex-container{
+  display: flex;
+  padding-bottom: 5%;
+}
+
+::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon:last-child {
+  margin-right: 0;
+  color: white;
+}
+
+::ng-deep .p-dialog .p-dialog-header .p-dialog-header-icon:enabled:hover {
+  color: white;
+  border-color: transparent;
+  background: black;
+}
+
+.main-container{
+  padding: 0%;
+    padding-left: 5%;
+}
+
+.female{
+  padding-left: 100%;
+}
+
+.width{
+  width: 21%;
+}
+
+/* .mb-3{
+  width: 35%;
+} */
+
+.flex-row{
+  display: flex;
+  flex-direction: row;
+}
+
+.address{
+  width: 74%;
+}
+
+.button-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  padding-top: 1%;
+}
+
+.cancel{
+  position: relative;
+  right: 2%;
+}
+
+.header{
+  background-color: cornflowerblue;
+  color: white;
+}
+
+p-checkbox {
+  display: inline-flex;
+  vertical-align: bottom;
+  align-items: center;
+  padding: 2%;
+}
+
+::ng-deep .p-checkbox-label {
+  line-height: 1;
+  font-size: 20px;
+}
+
+::ng-deep .p-dialog .p-dialog-header {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+.padding{
+  padding-top: 5%;
+}
+
+.flex-auto{
+  display: flex;
+  flex-direction: column;
+}
+
+.container-for-sex{
+  display: flex;
+  width: 30%;
+}
+
+.flex-direction{
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-contact{
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  padding-left: 3%;
+  padding-top: 3%;
+}
+
+.input-field {
+  margin-top: 0.5rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  grid-column: span 4;
+}
+
+/* Updated CSS for the table and card */
+#content {
+  width: 95%;
+  /* height: 95%; */
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+
+table {
+  width: 80%;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1%;
+  border-collapse: collapse;
+}
+
+.table-head{
+  background-color: #070057;
+  color: white;
+}
+
+.button-print{
+  position: relative;
+    right: 16%;
+}
+
+.barcode-image {
+  width: 50px; /* Adjust the width as needed */
+  height: 40px; /* Maintain aspect ratio */
+}
+
+
+/* th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  /* padding: 10px; */
+  /* border-bottom: 3px solid #1E6602;
+} */
+
+th.mat-header-cell {
+  font-weight: bold;
+  background-color: #070057;
+  color: #ffffff;
+}
+
+tr.mat-row {
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+tr.mat-row:hover {
+  background-color: rgba(30, 102, 2, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+}
+
+/* Removed unnecessary styles */
+
+mat-header-row{
+  background-color: rgba(30, 102, 2, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+}
+
+mat-card-title{
+    font-weight: 800;
+    height: 5vh;
+    margin-top: 20px;
+    align-items: center;
+    text-align: center;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 100px;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.mat-mdc-card-content {
+  display: block;
+  padding: 0;
+}
+
+.mat-mdc-card {
+  box-shadow: none;
+}
+
+::ng-deep .mat-mdc-table .mat-mdc-header-cell {
+  /* font-weight: bold; */
+  background-color: #070057 !important;
+  color: #ffffff;
+}
+
+.mat-elevation-z8, .mat-mdc-elevation-specific.mat-elevation-z8 {
+  box-shadow: 0px 5px 2px -10px rgba(0, 0, 0, 0.2), 0px 8px 20px 1px rgba(0, 0, 0, 0.11), 0px 3px 5px 2px rgba(0, 0, 0, 0.12);
+}
+
+.mat-mdc-card {
+  box-shadow: none;
+}
+
+.mat-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  min-height: var(--mat-paginator-container-size);
+  margin-top: 20px;
+  height: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.mat-mdc-card-content{
+  display: flex;
+  padding: 0;
+  align-items: baseline;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-between;
+  margin-bottom: -30px;
+}
+
+/* .searchBar{
+  position: relative;
+  left: 9.5%;
+  top: 10%;
+  margin-bottom: 10px;
+  height: 70px;
+  width: 300px;
+} */
+
+/* .mat-mdc-paginator-outer-container{
+  height: 0;
+  margin-top: 20px;
+} */
+
+/* ::ng-deep div.mat-mdc-paginator-outer-container {
+  height: 0 !important;
+  margin-top: 20px;
+} */
+
+.row-hover:hover{
+  background-color: #EEEEEE;
+  color: black;
+  cursor: pointer;
+}
+
+
+@media (max-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+

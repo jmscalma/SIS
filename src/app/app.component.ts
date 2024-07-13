@@ -7,14 +7,14 @@ import { signIn, type SignInInput } from 'aws-amplify/auth';
 //   password: string;
 // }
 
-async function handleSignIn({ username, password }: SignInInput) {
-  try {
-    const { isSignedIn, nextStep } = await signIn({ username, password });
-    console.log('nakalogin')
-  } catch (error) {
-    console.log('error signing in', error);
-  }
-}
+// async function handleSignIn({ username, password }: SignInInput) {
+//   try {
+//     const { isSignedIn, nextStep } = await signIn({ username, password });
+//     console.log('nakalogin')
+//   } catch (error) {
+//     console.log('error signing in', error);
+//   }
+// }
 
 @Component({
   selector: 'app-root',
@@ -22,21 +22,21 @@ async function handleSignIn({ username, password }: SignInInput) {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  username: any = '';
-  password: any = '';
-  title = 'amplify-test';
+  // username: any = '';
+  // password: any = '';
+  // title = 'amplify-test';
 
-  constructor(private router: Router){}
+  // constructor(private router: Router){}
 
 
-  async login(form: any){
+  // async login(form: any){
     // this.router.navigate(['/merchant/menu-management']);
-    console.log("Username", this.username)
-    console.log("Password", this.password)
-    const formData: any = {
-      username: this.username,
-      password: this.password,
-    };
-   await handleSignIn(formData)
-}
-}
+//     console.log("Username", this.username)
+//     console.log("Password", this.password)
+//     const formData: any = {
+//       username: this.username,
+//       password: this.password,
+//     };
+//    await handleSignIn(formData)
+// }
+ }

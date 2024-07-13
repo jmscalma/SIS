@@ -16,5 +16,23 @@
         "sis739efa31": {}
       }
     }
+  },
+  "sis": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sis-sis-34684-authRole",
+      "UnauthRoleArn": "arn:aws:iam::912964182495:role/amplify-sis-sis-34684-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::912964182495:role/amplify-sis-sis-34684-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-sis-sis-34684-deployment",
+      "UnauthRoleName": "amplify-sis-sis-34684-unauthRole",
+      "StackName": "amplify-sis-sis-34684",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:912964182495:stack/amplify-sis-sis-34684/81dd7930-3788-11ef-a95e-02885a3973a7",
+      "AmplifyAppId": "d21qtpdxkgiekm"
+    },
+    "categories": {
+      "auth": {
+        "sis739efa31": {}
+      }
+    }
   }
 }

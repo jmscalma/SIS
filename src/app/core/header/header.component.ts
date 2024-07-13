@@ -1,0 +1,51 @@
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { Observable, interval } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ConfirmationService, MenuItem } from 'primeng/api'; // Import ConfirmationService
+import { AuthService } from '../../features/auth/auth.service';
+import { ResetPasswordComponent } from '../../features/auth/reset-password/reset-password.component';
+
+
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrl: './header.component.css',
+  providers: [ConfirmationService] // Provide ConfirmationService
+
+})
+export class HeaderComponent {
+
+  path: string[] = [];
+  username!: any;
+  currentDate: Date = new Date();
+
+  constructor(private router: Router, private dialog: MatDialog, private confirmationService: ConfirmationService, private authService: AuthService){
+
+    this.username = localStorage.getItem('CognitoIdentityServiceProvider.284g4btkfvbd4odhdon8o0niuj.LastAuthUser');
+    this.router.events
+    .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+    .subscribe((data: NavigationEnd) => {
+      const parts = data.urlAfterRedirects.split('/').filter(part => part.length > 0);
+      const decodedPath = parts.map(part => part.replace(/%20/g, ' '));
+      this.path = decodedPath;
+    });
+  }
+
+  resetPasswordClick() {
+    // this.router.navigate(['/reset-password'])
+    this.dialog.open(ResetPasswordComponent)
+  }
+
+  ngOnInit() {
+    interval(1000).pipe(
+      map(() => {
+        this.currentDate = new Date();
+      })
+    ).subscribe();
+  }
+
+}
+

@@ -1,0 +1,288 @@
+component.css
+.main-div {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+::ng-deep .mat-divider[_ngcontent-ng-c1916053516] {
+  /* margin-top: 20px; */
+  /* margin-bottom: 20px; */
+}
+
+.card-header {
+  background-color: #3f51b5;
+  color: white;
+  padding: 10px;
+  display: flex;
+  padding: 0;
+  align-items: center;
+  flex-direction: row-reverse;
+  align-content: space-between;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.disabled-input {
+  background-color: #f9f9f9; /* Light gray background */
+  color: #999; /* Light gray text color */
+  pointer-events: none; /* Disable pointer events */
+}
+
+.card-header .flex-div{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  padding: 10px;
+}
+
+.add-brand{
+  background-color: rgba(255, 255, 255, 0.5);
+  color: blue;
+  /* font-size: 15px; */
+  border: 0;
+  width: 100%;
+  height: 100%;
+  /* padding: 8%; */
+  margin: 0;
+  margin-left: 1px;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 17px;
+      display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.fieldclass {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.mat-mdc-card-content {
+  display: block;
+  padding: 0;
+}
+
+.card-header {
+  background-color: #3f51b5;
+  color: white;
+  padding: 10px;
+}
+
+/* .mat-divider {
+  margin-top: 20px;
+  margin-bottom: 20px;
+} */
+
+@media (min-width: 600px) {
+  .mat-form-field {
+    width: 48%;
+    margin-right: 2%;
+  }
+}
+
+@media (max-width: 599px) {
+  .mat-form-field {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.confirmation-message{
+  text-align: center;
+
+}
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.confirmation-image{
+  height: 100px;
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+.image-container{
+  overflow: 0;
+}
+
+.button-position-right{
+  display: flex;
+  justify-content: right;
+}
+
+.icon-color{
+  color: white;
+}
+
+.example-button-row{
+  width: 7%;
+  height: 40px;
+  border: 0;
+
+}
+
+/* .example-button-row1{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  align-items: end;
+  background: none;
+
+} */
+
+.form{
+  display: flex;
+}
+
+.button-style {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.mat-fab{
+  position: absolute;
+  padding-left: 50px;
+  width: 20px;
+  padding-bottom: 100px;
+}
+
+.mat-button-display{
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+  height: 20px;
+}
+
+.flex-div{
+  color: white;
+}
+
+.button-container{
+  color: white;
+}
+
+.button-label{
+  color: white;
+}
+
+.mat-icon{
+  color: white;
+}
+
+.fieldclass {
+  margin-left: 1%;
+  padding-top: 1rem;
+  width: 22.5%;
+}
+
+.Peso-Sign{
+  font-size: 20px;
+}
+
+.card-header {
+  background-color: #3f51b5;
+  color: white;
+  padding: 10px;
+  border-radius: 0;
+}
+
+.mat-button-label{
+  color: white;
+}
+
+.button-container{
+  color: white;
+}
+
+.mdc-dialog__surface {
+  overflow-y: 0 !important;
+}
+
+#status-field{
+  /* width: 18%; */
+}
+
+#price-field{
+  /* width: 18%; */
+}
+
+.brand-field{
+  width: 22%;
+}
+
+span{
+  color: white;
+}
+
+::ng-deep .mat-mdc-table .mat-mdc-header-cell {
+  /* font-weight: bold; */
+  background-color: #ffffff !important;
+  color: black;
+
+}
+
+.table-container{
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.no-records{
+  align-items: center;
+  text-align: center;
+  /* position: relative;
+  left: 45%; */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  scrollbar-width: none; /* For Firefox */
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide the spinner in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.flex{
+  display: flex;
+  flex-direction: column;
+  padding-left: 5%;
+  padding-top: 4%;
+}
+
+.input-container{
+  display: flex;
+    gap: 0%;
+    flex-direction: row;
+}

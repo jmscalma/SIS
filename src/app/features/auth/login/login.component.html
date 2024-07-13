@@ -1,0 +1,58 @@
+<div class="container">
+
+  <div class="left-container">
+      <div class="image-container">
+          <img src="../assets/EITSI Inc. 1563x1563.png" alt="SpeedyBarakoLogo" class="speedyb-logo">
+      </div>
+  </div>
+
+  <div class="right-container">
+      <div class="login-form">
+          <h1>Student Information System</h1>
+          <h2 class="h2-style">LOGIN</h2>
+          <p-toast></p-toast>
+          <form (ngSubmit)="form" #form="ngForm">
+
+
+        <div class="card-flex justify-content-center">
+          <div class="flex flex-column gap-2">
+              <label for="username">Username</label>
+              <input pTooltip="Enter your username"
+                     tooltipPosition="top"
+                     tooltipEvent="focus"
+                     pInputText aria-describedby="username-help"
+                     type="text"
+                     id="username"
+                     name="username"
+                     ngModel [(ngModel)]="username"
+                     required>
+          </div>
+
+          <div class="flex flex-column gap-2 pass">
+            <label for="password">Password</label>
+            <div class="password-container">
+              <p-password
+                pTooltip="Enter your password"
+                tooltipPosition="top"
+                tooltipEvent="focus"
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                #passwordField="ngModel"
+                [feedback]="false"
+                [toggleMask]="true"
+              />
+            </div>
+          </div>
+
+              <button pButton pRipple type="submit" (click)="login()">Login</button>
+          </div>
+          </form>
+          <div class="forgot-message">
+            <span>Forgot Password? <a class="click-here" (click)="forgotPasswordDialog()">Click Here</a></span>
+          </div>
+
+      </div>
+  </div>
+
+</div>

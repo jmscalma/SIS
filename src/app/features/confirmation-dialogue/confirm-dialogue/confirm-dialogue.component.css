@@ -1,0 +1,67 @@
+/* Styles for the dialog title */
+h1[mat-dialog-title] {
+  font-size: 20px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  color: #3f51b5; /* Primary color */
+  margin: 0;
+  padding: 16px;
+  /* padding-top: 2px; */
+  /* border-bottom: 1px solid #e0e0e0; */
+  align-items: center;
+}
+
+/* Styles for the dialog content */
+div[mat-dialog-content] {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 16px;
+  color: #424242; /* Secondary text color */
+  padding: 16px;
+}
+
+/* Styles for the dialog actions */
+::ng-deep .mat-dialog-actions {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Styles for the buttons */
+button[mat-button] {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 14px;
+  margin: 0 8px;
+}
+
+button[mat-button]:first-child {
+  color: #4caf50; /* Red color for the cancel button */
+}
+
+button[mat-button]:last-child {
+  color: #f44336; /* Green color for the confirm button */
+}
+
+/* .mat-dialog-actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+} */
+
+.mat-mdc-dialog-actions {
+  justify-content: flex-end; /* or your desired alignment */
+}
+
+.reverse-buttons {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}

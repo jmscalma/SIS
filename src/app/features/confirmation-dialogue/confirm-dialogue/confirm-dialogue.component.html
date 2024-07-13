@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <p>{{data.message}}</p>
+</div>
+<div mat-dialog-actions [ngClass]="{'reverse-buttons': data.reverseButtons}">
+  <button mat-button (click)="onYesClick()">Confirm</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

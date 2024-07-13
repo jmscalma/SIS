@@ -1,0 +1,95 @@
+<div class="main-content hide-scrollbar">
+  <mat-card class="hide-scrollbar">
+    <mat-card-header class="card-header">
+      <div class="flex-div">
+        <span>EDIT STUDENT</span>
+        <span>Student Status - {{status}}</span>
+        <div class="button-container">
+          <button class="button-label" mat-button *ngIf="status == 'Active'" (click)="disableStudentById(true)" [hidden]="!isEditable" (mouseenter)="isDisableHovered = true" (mouseleave)="isDisableHovered = false">
+            <mat-icon>block</mat-icon>
+            <span *ngIf="isDisableHovered">Update to Disable</span>
+          </button>
+          <button class="button-label" mat-button *ngIf="status == 'Disabled'" (click)="enableCustomerById(true)" [hidden]="!isEditable" (mouseenter)="isEnableHovered = true" (mouseleave)="isEnableHovered = false">
+            <mat-icon>check_circle</mat-icon>
+            <span *ngIf="isEnableHovered">Update to Enable</span>
+          </button>
+          <button class="button-label" mat-button (click)="isEditableBtn()" (mouseenter)="isEditHovered = true" (mouseleave)="isEditHovered = false">
+            <mat-icon *ngIf="!isEditHovered">edit</mat-icon>
+            <span *ngIf="isEditHovered">Edit</span>
+          </button>
+          <button class="button-label" mat-button (click)="closeDialog()" (mouseenter)="isCloseHovered = true" (mouseleave)="isCloseHovered = false">
+            <mat-icon *ngIf="!isCloseHovered">close</mat-icon>
+            <span *ngIf="isCloseHovered">Close</span>
+          </button>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="piForm">
+
+        <div class="input-container">
+        <div class="flex flex-column gap-2">
+          <label for="username">Username</label>
+          <input
+              pInputText
+              id="username"
+              formControlName="snCtrl" />
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="username">Address</label>
+        <input
+            pInputText
+            id="address"
+            formControlName="aCtrl" />
+    </div>
+
+    <div class="flex flex-column gap-2">
+      <label for="username">Contact No.</label>
+      <input
+          pInputText
+          id="contactno"
+          formControlName="cnCtrl" />
+    </div>
+
+    </div>
+
+    <div class="input-container">
+    <div class="flex flex-column gap-2">
+    <label for="username">Email</label>
+    <input
+        pInputText
+        id="email"
+        formControlName="eCtrl" />
+    </div>
+
+    <div class="flex flex-column gap-2">
+    <label for="emergencycontactno">Emergency Contact No.</label>
+    <input
+        pInputText
+        id="email"
+        formControlName="ecnCtrl" />
+    </div>
+
+    <div class="flex flex-column gap-2">
+    <label for="schoolattended">Last School Attended</label>
+    <input
+        pInputText
+        id="schoolattended"
+        formControlName="lsaCtrl" />
+    </div>
+    </div>
+
+      </form>
+
+      <div class="button-style">
+        <button mat-button class="update-button" (click)="editStudentDetails(true)" [hidden]="!isEditable" [disabled]="piForm.invalid">
+          <!-- <mat-icon>update</mat-icon> -->
+          UPDATE
+        </button>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
