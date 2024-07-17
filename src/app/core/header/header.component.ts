@@ -3,10 +3,10 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Observable, interval } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationService, MenuItem } from 'primeng/api'; // Import ConfirmationService
 import { AuthService } from '../../features/auth/auth.service';
 import { ResetPasswordComponent } from '../../features/auth/reset-password/reset-password.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 
 @Component({
@@ -21,8 +21,9 @@ export class HeaderComponent {
   path: string[] = [];
   username!: any;
   currentDate: Date = new Date();
+  ref: DynamicDialogRef | undefined;
 
-  constructor(private router: Router, private dialog: MatDialog, private confirmationService: ConfirmationService, private authService: AuthService){
+  constructor(private dialogService: DialogService, private router: Router, private confirmationService: ConfirmationService, private authService: AuthService){
 
     this.username = localStorage.getItem('CognitoIdentityServiceProvider.284g4btkfvbd4odhdon8o0niuj.LastAuthUser');
     this.router.events
@@ -36,7 +37,13 @@ export class HeaderComponent {
 
   resetPasswordClick() {
     // this.router.navigate(['/reset-password'])
-    this.dialog.open(ResetPasswordComponent)
+    // this.dialog.open(ResetPasswordComponent)
+    this.ref = this.dialogService.open(ResetPasswordComponent, {
+      // header: 'CHANGE PASSWORD',
+      width: '30%',
+      height: '90%',
+      data: {dialogRef: this.ref }
+    });
   }
 
   ngOnInit() {

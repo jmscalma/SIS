@@ -17,8 +17,8 @@ component.css
 }
 
 .card-header {
-  background-color: #3f51b5;
-  color: white;
+  /* background-color: #3f51b5;
+  color: white; */
   padding: 10px;
   display: flex;
   padding: 0;
@@ -75,11 +75,11 @@ component.css
   padding: 0;
 }
 
-.card-header {
+/* .card-header {
   background-color: #3f51b5;
   color: white;
   padding: 10px;
-}
+} */
 
 /* .mat-divider {
   margin-top: 20px;
@@ -158,6 +158,8 @@ component.css
   align-items: center;
   width: 100%;
   padding-bottom: 10px;
+  padding-right: 5%;
+  padding-top: 5%;
 }
 
 .mat-fab{
@@ -175,19 +177,19 @@ component.css
 }
 
 .flex-div{
-  color: white;
+  color: black;
 }
 
 .button-container{
-  color: white;
+  color: black;
 }
 
 .button-label{
-  color: white;
+  color: black;
 }
 
 .mat-icon{
-  color: white;
+  color: black;
 }
 
 .fieldclass {
@@ -201,8 +203,8 @@ component.css
 }
 
 .card-header {
-  background-color: #3f51b5;
-  color: white;
+  /* background-color: #3f51b5;
+  color: white; */
   padding: 10px;
   border-radius: 0;
 }
@@ -212,7 +214,7 @@ component.css
 }
 
 .button-container{
-  color: white;
+  color: black;
 }
 
 .mdc-dialog__surface {
@@ -232,7 +234,7 @@ component.css
 }
 
 span{
-  color: white;
+  color: black;
 }
 
 ::ng-deep .mat-mdc-table .mat-mdc-header-cell {

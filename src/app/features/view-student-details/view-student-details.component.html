@@ -2,8 +2,7 @@
   <mat-card class="hide-scrollbar">
     <mat-card-header class="card-header">
       <div class="flex-div">
-        <span>EDIT STUDENT</span>
-        <span>Student Status - {{status}}</span>
+        <span>Student Status - <b [ngStyle]="{'color': status === 'Active' ? '#008000' : status === 'Disabled' ? '#FF0000' : 'inherit'}">{{status}}</b></span>
         <div class="button-container">
           <button class="button-label" mat-button *ngIf="status == 'Active'" (click)="disableStudentById(true)" [hidden]="!isEditable" (mouseenter)="isDisableHovered = true" (mouseleave)="isDisableHovered = false">
             <mat-icon>block</mat-icon>
@@ -17,10 +16,10 @@
             <mat-icon *ngIf="!isEditHovered">edit</mat-icon>
             <span *ngIf="isEditHovered">Edit</span>
           </button>
-          <button class="button-label" mat-button (click)="closeDialog()" (mouseenter)="isCloseHovered = true" (mouseleave)="isCloseHovered = false">
+          <!-- <button class="button-label" mat-button (click)="closeDialog()" (mouseenter)="isCloseHovered = true" (mouseleave)="isCloseHovered = false">
             <mat-icon *ngIf="!isCloseHovered">close</mat-icon>
             <span *ngIf="isCloseHovered">Close</span>
-          </button>
+          </button> -->
         </div>
       </div>
     </mat-card-header>
@@ -35,6 +34,9 @@
               pInputText
               id="username"
               formControlName="snCtrl" />
+              <div *ngIf="piForm.get('cnCtrl')?.invalid && (piForm.get('cnCtrl')?.dirty || piForm.get('cnCtrl')?.touched)" class="error-message">
+                {{ invalidName }}
+              </div>
       </div>
 
       <div class="flex flex-column gap-2">
@@ -43,6 +45,9 @@
             pInputText
             id="address"
             formControlName="aCtrl" />
+            <div *ngIf="piForm.get('caCtrl')?.invalid && (piForm.get('caCtrl')?.dirty || piForm.get('caCtrl')?.touched)" class="error-message">
+              {{ invalidAddress }}
+            </div>
     </div>
 
     <div class="flex flex-column gap-2">
@@ -51,6 +56,9 @@
           pInputText
           id="contactno"
           formControlName="cnCtrl" />
+          <div *ngIf="piForm.get('pnCtrl')?.invalid && (piForm.get('pnCtrl')?.dirty || piForm.get('pnCtrl')?.touched)" class="error-message">
+            {{ invalidPhoneNumber }}
+          </div>
     </div>
 
     </div>
@@ -62,6 +70,9 @@
         pInputText
         id="email"
         formControlName="eCtrl" />
+        <div *ngIf="piForm.get('eaCtrl')?.invalid && (piForm.get('eaCtrl')?.dirty || piForm.get('eaCtrl')?.touched)" class="error-message">
+          {{ invalidEmail }}
+        </div>
     </div>
 
     <div class="flex flex-column gap-2">
@@ -70,6 +81,9 @@
         pInputText
         id="email"
         formControlName="ecnCtrl" />
+        <div *ngIf="piForm.get('ecCtrl')?.invalid && (piForm.get('ecCtrl')?.dirty || piForm.get('ecCtrl')?.touched)" class="error-message">
+          {{ invalidPhoneNumber }}
+        </div>
     </div>
 
     <div class="flex flex-column gap-2">
@@ -78,13 +92,16 @@
         pInputText
         id="schoolattended"
         formControlName="lsaCtrl" />
+        <div *ngIf="piForm.get('lsaCtrl')?.invalid && (piForm.get('lsaCtrl')?.dirty || piForm.get('lsaCtrl')?.touched)" class="error-message">
+          {{ invalidAddress }}
+        </div>
     </div>
     </div>
 
       </form>
 
       <div class="button-style">
-        <button mat-button class="update-button" (click)="editStudentDetails(true)" [hidden]="!isEditable" [disabled]="piForm.invalid">
+        <button mat-button class="update-button" *ngIf="status !== 'Disabled'" [disabled]="piForm.invalid" (click)="editStudentDetails(true)" [hidden]="!isEditable" [disabled]="piForm.invalid">
           <!-- <mat-icon>update</mat-icon> -->
           UPDATE
         </button>

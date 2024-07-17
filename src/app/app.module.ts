@@ -56,6 +56,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCard } from '@angular/material/card';
+import { PaginatorModule } from 'primeng/paginator';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { DialogService } from 'primeng/dynamicdialog';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { MainDashboardComponent } from './features/main-dashboard/main-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +70,8 @@ import { MatCard } from '@angular/material/card';
     AddStudentComponent,
     ForceChangePasswordComponent,
     ConfirmDialogueComponent,
-    ViewStudentDetailsComponent
+    ViewStudentDetailsComponent,
+    MainDashboardComponent
   ],
   imports: [
     MatFormField,
@@ -112,9 +119,10 @@ import { MatCard } from '@angular/material/card';
     MatIconModule,
     MatButtonModule,
     AuthModule,
-    MatTableModule
+    MatTableModule,
+    PaginatorModule
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService, provideAnimationsAsync(), provideNativeDateAdapter(), DialogService, DynamicDialogRef, DynamicDialogConfig],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

@@ -1,24 +1,36 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+
 
 @Component({
   selector: 'app-confirm-dialogue',
   templateUrl: './confirm-dialogue.component.html',
   styleUrl: './confirm-dialogue.component.css'
 })
-export class ConfirmDialogueComponent {
+export class ConfirmDialogueComponent implements OnInit{
+
+  title!: string;
+  message!: string;
+  reverseButtons!: boolean;
+
+  ngOnInit(): void {
+    // Initialize dialog data from config
+    this.title = this.config.data.title;
+    this.message = this.config.data.message;
+    this.reverseButtons = this.config.data.reverseButtons;
+  }
 
   constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogueComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig
   ) {}
 
   onNoClick(): void {
-    this.dialogRef.close(false);
+    this.ref.close(false);
   }
 
   onYesClick(): void {
-    this.dialogRef.close(true);
+    this.ref.close(true);
   }
 
 }

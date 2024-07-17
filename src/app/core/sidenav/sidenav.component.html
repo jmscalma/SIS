@@ -18,7 +18,7 @@
             </a>
             <a class="sidenav-nav-link"
                *ngIf="data.routeLink === '/login'"
-               (click)="openConfirmDialog(false)">
+               (click)="show()">
               <i class="sidenav-link-icon" [ngClass]="data.icon"></i>
               <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">{{ data.label }}</span>
             </a>

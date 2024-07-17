@@ -2,7 +2,7 @@ import { AbstractControl, ValidatorFn, Validators, FormControl, ValidationErrors
 
 //---------------------------------------------------------------------------------------------------------------------------
 
-//validator for supplier name that will accept only alpha and '-'. max of 50 characters
+//validator for name that will accept only alpha and '-'. max of 50 characters
 export function NameValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     const value = control.value;
@@ -26,8 +26,7 @@ export function PhoneNumberValidator(): ValidatorFn {
   };
 }
 
-
-//validator for supplier address that allows alphanumeric characters, spaces, dashes, dots, commas, hash symbols, and slashes in the address.
+//validator for address that allows alphanumeric characters, spaces, dashes, dots, commas, hash symbols, and slashes in the address.
 export function AddressValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     const value = control.value;
@@ -38,6 +37,18 @@ export function AddressValidator(): ValidatorFn {
     }
 
     return { invalidSupplier: true }; // Invalid
+  };
+}
+
+//validator for email
+export function EmailValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const value = control.value;
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      console.log('email valid');
+      return null; // Valid
+    }
+    return { invalidEmailAddress: true }; // Invalid
   };
 }
 

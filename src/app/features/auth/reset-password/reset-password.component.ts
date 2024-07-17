@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DialogRef } from '@angular/cdk/dialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+
+
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
@@ -19,8 +20,10 @@ export class ResetPasswordComponent implements OnInit{
   passwordmatch!: any;
   errorMessage: any;
   piForm!: FormGroup;
+  ref: DynamicDialogRef | undefined;
 
-  constructor (public router: Router, public fb: FormBuilder, public authService: AuthService, public dialog: MatDialog, public dialogRef: DialogRef){}
+
+  constructor (private dialogService: DialogService, public router: Router, public fb: FormBuilder, public authService: AuthService){}
 
   ngOnInit(){
 
@@ -49,7 +52,9 @@ export class ResetPasswordComponent implements OnInit{
           oldPassword: this.oldPassword,
           newPassword: this.newPassword
         });
-        this.dialogRef.close();
+        if (this.ref) {
+          this.ref.close();
+        }
       } catch (err) {
         this.errorMessage = 'Failed to update password. Please try again.';
         console.log(err);
@@ -60,7 +65,9 @@ export class ResetPasswordComponent implements OnInit{
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 
 }

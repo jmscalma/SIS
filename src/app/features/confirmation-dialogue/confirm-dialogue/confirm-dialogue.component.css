@@ -22,6 +22,21 @@ div[mat-dialog-content] {
   padding: 16px;
 }
 
+.button-container{
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+  gap: 20%;
+  padding-top: 10%;
+}
+
+ng-deep .p-dialog .p-dialog-content {
+  background: #ffffff;
+  color: #4b5563;
+  padding: 5%;
+}
+
 /* Styles for the dialog actions */
 ::ng-deep .mat-dialog-actions {
   font-family: "Poppins", sans-serif;

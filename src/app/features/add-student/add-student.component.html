@@ -1,67 +1,61 @@
 <div class="card flex justify-content-center">
   <div class="table-container">
-    <mat-card id="content" class="mat-elevation-z8" >
-      <mat-card-content>
-        <button class="button-addsupplier" mat-raised-button color="primary" (click)="showDialog()">
+    <p-card class="mat-elevation-z8" >
+
+      <div class="button-search-container">
+        <button class="button-addsupplier" pButton color="primary" (click)="showDialog()">
           <mat-icon>add</mat-icon>
           Add Students
         </button>
-        <mat-form-field class="searchBar">
-          <input matInput autocomplete="off" #searchbox type="text" name="search" placeholder="Search" (keyup)="applyFilter(searchbox.value)">
-          <mat-icon style="color:#1E6602;"  matPrefix>search</mat-icon>
-      </mat-form-field>
 
-      </mat-card-content>
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+        <div class="search-container">
+          <input pInputText autocomplete="off" #searchbox type="text" name="search" placeholder="Search" (keyup)="applyFilter(searchbox.value)">
+          <i class="fas fa-search search-icon"></i>
+        </div>
 
-        <ng-container matColumnDef="student_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.student_name}}</td>
-        </ng-container>
+      </div>
+      <p-table class="p-table-style"
+      [value]="dataSource"
+      [paginator]="true"
+      [alwaysShowPaginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="total"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [lazy]="true"
+      (onLazyLoad)="onPaginate($event)"
+      [defaultSortOrder]="1"
+      (sort)="onSort($event)">
+      <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="student_name">Student Name <p-sortIcon field="student_name"></p-sortIcon></th>
+            <th pSortableColumn="address">Address <p-sortIcon field="address"></p-sortIcon></th>
+            <th pSortableColumn="contact_no">Contact No. <p-sortIcon field="contact_no"></p-sortIcon></th>
+            <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+            <th pSortableColumn="civil_status">Civil Status <p-sortIcon field="civil_status"></p-sortIcon></th>
+            <th pSortableColumn="emergency_contact_no">Emergency Contact No. <p-sortIcon field="emergency_contact_no"></p-sortIcon></th>
+            <th pSortableColumn="last_school_attended">Last School Attended <p-sortIcon field="last_school_attended"></p-sortIcon></th>
+            <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-element>
+          <tr class="p-row" (click)="getStudentDetails(element)">
+            <td>{{ element.student_name }}</td>
+            <td>{{ element.address }}</td>
+            <td>{{ element.contact_no }}</td>
+            <td>{{ element.email }}</td>
+            <td>{{ element.civil_status }}</td>
+            <td>{{ element.emergency_contact_no }}</td>
+            <td>{{ element.last_school_attended }}</td>
+            <td>{{ element.status }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
 
-        <ng-container matColumnDef="address">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.address }}</td>
-        </ng-container>
+      <!-- <mat-paginator [length]="total" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize" [pageIndex]="pageNo -1"
+              aria-label="Select page" (page)="onPaginate($event)" #paginator>
+      </mat-paginator> -->
 
-        <ng-container matColumnDef="contact_no">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Contact No.</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.contact_no}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.email }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="civil_status">
-          <th  mat-header-cell *matHeaderCellDef mat-sort-header>Civil Status</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.civil_status }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="emergency_contact_no">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Emergency Contact No.</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.emergency_contact_no }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="last_school_attended">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last School Attended</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.last_school_attended }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-          <td mat-cell *matCellDef="let element" class="truncate-cell">{{ element.status }}</td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedSupplies" class="mat-header-custom"></tr>
-        <tr mat-row class="row-hover" *matRowDef="let row; columns: displayedSupplies;" (click)="getStudentDetails(row)"></tr>
-      </table>
-
-      <mat-paginator class="mat-paginator" [length]="total" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize" [pageIndex]="pageNo -1"
-              aria-label="Select page" (page)="onPaginate($event)">
-      </mat-paginator>
-      </mat-card>
+      </p-card>
 
     </div>
 
@@ -72,15 +66,22 @@
       <div class="main-container grid-container">
       <div class="flex-container padding">
       <div>
+        <form [formGroup]="piForm">
       <div class="flex-box">
-      <div class="flex align-items-center gap-3 mb-3 grid-item">
-          <label for="username" class="font-semibold w-6rem">Complete Name(Last, First, M.I)*</label>
-          <input [(ngModel)]="completename" pInputText id="username" class="flex-auto" autocomplete="off"/>
-      </div>
+        <div class="flex align-items-center gap-3 mb-3 grid-item">
+          <label for="username" class="font-semibold w-6rem">Complete Name*</label>
+          <input pInputText [(ngModel)]="completename" formControlName="cnCtrl" id="username" class="flex-auto" autocomplete="off"/>
+          <div *ngIf="piForm.get('cnCtrl')?.invalid && (piForm.get('cnCtrl')?.dirty || piForm.get('cnCtrl')?.touched)" class="error-message">
+            {{ invalidName }}
+          </div>
+        </div>
 
       <div class="flex align-items-center gap-3 mb-3 address grid-item">
         <label for="address" class="font-semibold w-6rem">Complete Address*</label>
-        <input [(ngModel)]="fulladdress" pInputText id="address" class="flex-auto" autocomplete="off" />
+        <input [(ngModel)]="fulladdress" formControlName="caCtrl" pInputText id="address" class="flex-auto" autocomplete="off" />
+        <div *ngIf="piForm.get('caCtrl')?.invalid && (piForm.get('caCtrl')?.dirty || piForm.get('caCtrl')?.touched)" class="error-message">
+          {{ invalidAddress }}
+        </div>
     </div>
 
     <div class="flex-contact flex grid-item">
@@ -88,14 +89,21 @@
     <p-inputMask
     mask="99999999999"
     [(ngModel)]="contactno"
+    formControlName="pnCtrl"
     placeholder="99999999999"/>
+    <div *ngIf="piForm.get('pnCtrl')?.invalid && (piForm.get('pnCtrl')?.dirty || piForm.get('pnCtrl')?.touched)" class="error-message">
+      {{ invalidPhoneNumber }}
+    </div>
   </div>
 </div>
 
   <div class="flex-box">
   <div class="flex align-items-center gap-3 mb-3 grid-item">
     <label for="username" class="font-semibold w-6rem">Email Address*</label>
-    <input [(ngModel)]="email" pInputText id="email" class="flex-auto" autocomplete="off" />
+    <input [(ngModel)]="email" formControlName="eaCtrl" pInputText id="email" class="flex-auto" autocomplete="off" />
+    <div *ngIf="piForm.get('eaCtrl')?.invalid && (piForm.get('eaCtrl')?.dirty || piForm.get('eaCtrl')?.touched)" class="error-message">
+      {{ invalidEmail }}
+    </div>
   </div>
 
   <div class="card flex justify-content-center grid-item">
@@ -113,22 +121,31 @@
   <p-inputMask
   mask="99999999999"
   [(ngModel)]="emergencycontactno"
-  placeholder="99999999999" />
+  placeholder="99999999999"
+  formControlName="ecCtrl"/>
+  <div *ngIf="piForm.get('ecCtrl')?.invalid && (piForm.get('ecCtrl')?.dirty || piForm.get('ecCtrl')?.touched)" class="error-message">
+    {{ invalidPhoneNumber }}
+  </div>
 </div>
 <br/>
+
 <div class="flex-box">
 <div class="flex align-items-center gap-3 mb-3 grid-item">
   <label for="username" class="font-semibold w-6rem">Last School Attended*</label>
-  <input [(ngModel)]="schoolattended" pInputText id="schoolattended" class="flex-auto" autocomplete="off"/>
+  <input [(ngModel)]="schoolattended" formControlName="lsaCtrl" pInputText id="schoolattended" class="flex-auto" autocomplete="off"/>
+  <div *ngIf="piForm.get('lsaCtrl')?.invalid && (piForm.get('lsaCtrl')?.dirty || piForm.get('lsaCtrl')?.touched)" class="error-message">
+    {{ invalidAddress }}
+  </div>
 </div>
 </div>
 </div>
+</form>
 </div>
       </div>
 
       <div class="flex justify-content-end gap-2 button-container">
           <p-button label="Cancel" class="cancel" severity="secondary" (click)="visible = false" />
-          <p-button label="Next" (click)="visible = false" (onClick)="addStudent()"/>
+          <p-button label="Next" [disabled]="piForm.invalid" (click)="visible = false" (onClick)="addStudent()"/>
       </div>
     </div>
     </ng-template>

@@ -66,12 +66,12 @@ color: #ffffff;
 .body {
   grid-area: body;
   height: 100%;
-  width: 100%;
+  width: 90%;
   overflow-y: auto;
   display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: flex-start;
+  align-items: baseline;
+  position: relative;
+  left: 10%;
 }
 
 ::ng-deep .mat-body, .mat-body-2, .mat-typography .mat-body, .mat-typography .mat-body-2, .mat-typography {

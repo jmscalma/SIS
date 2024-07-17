@@ -3,7 +3,6 @@ import { signOut } from 'aws-amplify/auth';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { AppService } from '../../app.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { debounce } from 'lodash';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ViewStudentDetailsComponent } from '../view-student-details/view-student-details.component';
@@ -11,7 +10,17 @@ import { ViewStudentDetailsComponent } from '../view-student-details/view-studen
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
-
+import { MatPaginator } from '@angular/material/paginator';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ConfirmDialogueComponent } from '../confirmation-dialogue/confirm-dialogue/confirm-dialogue.component';
+import { Validators } from '@angular/forms';
+import { AddressValidator,
+         NameValidator,
+         PhoneNumberValidator,
+         EmailValidator
+       } from '../../shared/validators/validators';
+import { FormBuilder } from '@angular/forms';
+import { ERROR_MESSAGES } from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-add-student',
@@ -20,7 +29,13 @@ import { Subject } from 'rxjs';
 })
 export class AddStudentComponent implements OnInit {
 
-  constructor(private service: AppService, private dialog: MatDialog, private router: Router, private confirmService: ConfirmationService, private message: MessageService){
+  constructor(private dialogService: DialogService,
+              private service: AppService,
+              private dialog: MatDialog,
+              private router: Router,
+              private confirmService: ConfirmationService,
+              private message: MessageService,
+              private _formBuilder: FormBuilder,){
 
   }
 
@@ -35,7 +50,8 @@ export class AddStudentComponent implements OnInit {
     'status',
   ];
 
-  dataSource = new MatTableDataSource<any>();
+  ref: DynamicDialogRef | undefined;
+  dataSource: any[] = [];
   items!: MenuItem[];
   civilStatus: string[] = ['Single', 'Married', 'Widowed', 'Separated'];
   listOfRequirements: any[] = [];
@@ -54,16 +70,36 @@ export class AddStudentComponent implements OnInit {
   dataFiles: any;
   keyword: string = '';
   mockUserId = 2;
+  sortField: string = 'student_name';  // Default sort field
+  sortOrder: number = 1;  // Default sort order (1 for ascending, -1 for descending)
+  rowsPerPageOptions: number[] = [5, 10, 20, 50];
 
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit() {
     this.applyFilter = debounce(this.applyFilter, 1000);
     this.civilStatusOptions = this.civilStatus.map(status => ({ label: status, value: status }));
     this.service.currentAuthenticatedUser();
-
     this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
   }
+
+  //error message
+  invalidAddress = ERROR_MESSAGES.invalidAddress;
+  invalidName = ERROR_MESSAGES.invalidName;
+  invalidPhoneNumber = ERROR_MESSAGES.invalidPhoneNumber;
+  invalidEmail = ERROR_MESSAGES.invalidEmail;
+  //form groups
+  piForm =  this._formBuilder.group({
+
+    cnCtrl: ['', [Validators.required, NameValidator()]],
+    caCtrl: ['', [Validators.required, AddressValidator]],
+    pnCtrl: ['', [Validators.required, PhoneNumberValidator]],
+    eaCtrl: ['', [Validators.required, Validators.email, EmailValidator]],
+    ecCtrl: ['', [Validators.required, PhoneNumberValidator]],
+    lsaCtrl: ['', [Validators.required, AddressValidator]]
+
+  });
 
   logoutBtn(event: Event) {
     this.confirmService.confirm({
@@ -96,7 +132,7 @@ export class AddStudentComponent implements OnInit {
       .subscribe((data: any) => {
         this.dataFiles = data.data;
         this.total = data.total;
-        this.dataSource.data = data.data;
+        this.dataSource = data.data;
         this.service.search = data.result;
         console.log('keyword', keyword)
       });
@@ -130,19 +166,14 @@ getStudentDetails(row: any) {
   console.log('row', row);
   this.service.student_id = row.student_id;
 
-  const dialogConfig = new MatDialogConfig();
-  dialogConfig.disableClose = true;
-  dialogConfig.data = row;
-  dialogConfig.width = '70%';  // Adjust width as needed
-  dialogConfig.height = '60vh';
-  dialogConfig.autoFocus = true;
-  dialogConfig.position = { top: '10%', left: '20%' };
-  dialogConfig.panelClass = 'custom-dialog-container';
-  dialogConfig.backdropClass = 'custom-dialog-backdrop';
+  const dialogRef = this.dialogService.open(ViewStudentDetailsComponent, {
+    data: row,
+    header: 'Student Details',
+    width: '70%',
+    height: '60vh'
+  });
 
-  const dialogRef = this.dialog.open(ViewStudentDetailsComponent, dialogConfig);
-
-  dialogRef.afterClosed().subscribe((res) => {
+  dialogRef.onClose.subscribe((res) => {
     this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
   });
 }
@@ -154,9 +185,16 @@ applyFilter(value: string) {
 }
 
 onPaginate(event: any) {
-  this.pageNo = event.pageIndex + 1;
-  this.pageSize = event.pageSize;
+  this.pageNo = event.first / event.rows + 1;
+  this.pageSize = event.rows;
+
   this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
+  console.log('Pagination is working', this.pageSize, this.pageSize)
 }
 
+onSort(event: any) {
+  this.sortField = event.field;
+  this.sortOrder = event.order === 1 ? 1 : -1;  // PrimeNG order: 1 for ascending, -1 for descending
+  this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
+}
 }

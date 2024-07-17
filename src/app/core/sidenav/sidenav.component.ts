@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppService } from '../../app.service';
 import { ConfirmDialogueComponent } from '../../features/confirmation-dialogue/confirm-dialogue/confirm-dialogue.component';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Dialog } from 'primeng/dialog';
+import { result } from 'lodash';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -51,6 +54,7 @@ export class SidenavComponent {
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
 
   nav = navbar;
+  ref: DynamicDialogRef | undefined;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -61,7 +65,7 @@ export class SidenavComponent {
     }
   }
 
-  constructor(private router: Router, private service: AppService, private dialog: MatDialog, private confirmationService: ConfirmationService, private message: MessageService) { }
+  constructor(private dialogService: DialogService, private router: Router, private service: AppService, private confirmationService: ConfirmationService, private message: MessageService) { }
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
@@ -75,40 +79,19 @@ export class SidenavComponent {
     });
   }
 
-  // logout() {
-  //   this.confirmationService.confirm({
-  //     message: 'Are you sure that you want to logout?',
-  //     header: 'Confirmation',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     acceptIcon: 'pi pi-check',
-  //     rejectIcon: 'pi pi-times',
-  //     acceptButtonStyleClass: 'p-button-success',
-  //     rejectButtonStyleClass: 'p-button-text',
-  //     accept: () => {
-  //       this.service.handleSignOut().then(() => {
-  //         this.router.navigate(['/login']);
-  //       }).catch((error) => {
-  //         console.error('Error during logout:', error);
-  //         this.message.add({ severity: 'error', summary: 'Error', detail: 'Failed to logout', life: 3000 });
-  //       });
-  //     },
-  //     reject: () => {
-  //       this.message.add({ severity: 'info', summary: 'Rejected', detail: 'Logout canceled', life: 3000 });
-  //     }
-  //   });
-  // }
-
-  openConfirmDialog(reverseButtons: boolean) {
-    const dialogRef = this.dialog.open(ConfirmDialogueComponent, {
+  show() {
+    this.ref = this.dialogService.open(ConfirmDialogueComponent, {
+      header: 'Logout Confirmation',
       width: '300px',
-      position: {top: '18%', left: '45%'},
-      data: { title: 'Logout Confirmation', message: 'Are you sure you want to logout?', reverseButtons: reverseButtons }
+      contentStyle: { 'max-height': '350px', 'overflow': 'auto' },
+      baseZIndex: 10000,
+      data: { message: 'Are you sure you want to logout?', dialogRef: this.ref } // Pass the ref if needed by ConfirmDialogueComponent
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.ref.onClose.subscribe((result: boolean) => {
       if (result) {
         sessionStorage.clear();
-        this.logouts(); // Call logouts method
+        this.logouts();
       }
     });
   }

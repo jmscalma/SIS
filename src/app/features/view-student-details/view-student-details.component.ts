@@ -4,9 +4,16 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogRef } from '@angular/cdk/dialog';
-import { MatDialogRef } from '@angular/material/dialog';
+// import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogueComponent } from '../confirmation-dialogue/confirm-dialogue/confirm-dialogue.component';
-import { MatDialog } from '@angular/material/dialog';
+// import { MatDialog } from '@angular/material/dialog';
+import { DynamicDialogConfig, DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
+import { AddressValidator,
+  NameValidator,
+  PhoneNumberValidator,
+  EmailValidator
+} from '../../shared/validators/validators';
+import { ERROR_MESSAGES } from '../../shared/constants/constants';
 
 @Component({
   selector: 'app-view-student-details',
@@ -19,9 +26,9 @@ export class ViewStudentDetailsComponent implements OnInit{
     private service: AppService,
     private formBuilder: FormBuilder,
     private breakpointObserver: BreakpointObserver,
-    private dialogRef: MatDialogRef<ViewStudentDetailsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialog: MatDialog,
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig,
+    private dialogService: DialogService,
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +36,7 @@ export class ViewStudentDetailsComponent implements OnInit{
       .observe([Breakpoints.Small, Breakpoints.XSmall])
       .subscribe((result) => (this.isSmallScreen = result.matches));
     // this.piForm();
-    this.getStudentById(this.data.student_id);
+    this.getStudentById(this.config.data.student_id);
   }
 
   //Variables
@@ -55,18 +62,24 @@ export class ViewStudentDetailsComponent implements OnInit{
   isDisableHovered: boolean = false;
   errorMessage: any;
 
+   //error message
+   invalidAddress = ERROR_MESSAGES.invalidAddress;
+   invalidName = ERROR_MESSAGES.invalidName;
+   invalidPhoneNumber = ERROR_MESSAGES.invalidPhoneNumber;
+   invalidEmail = ERROR_MESSAGES.invalidEmail;
+
    //form group
    piForm =  this.formBuilder.group({
-    snCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, ]],
-    aCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, ]],
-    cnCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, ]],
-    eCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, ]],
-    ecnCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, ]],
-    lsaCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, ]],
+    snCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, NameValidator]],
+    aCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, AddressValidator]],
+    cnCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, PhoneNumberValidator]],
+    eCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, EmailValidator]],
+    ecnCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, PhoneNumberValidator]],
+    lsaCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, AddressValidator]],
   });
 
   closeDialog(){
-    this.dialogRef.close()
+    this.ref.close()
   }
 
   isEditableBtn(): void {
@@ -114,13 +127,13 @@ export class ViewStudentDetailsComponent implements OnInit{
   }
 
   editStudentDetails(reverseButtons: boolean) {
-    const dialogRef = this.dialog.open(ConfirmDialogueComponent, {
+    this.ref = this.dialogService.open(ConfirmDialogueComponent, {
       width: '250px',
       data: { title: 'Confirm Update', message: 'Are you sure you want to update this supllies details?', reverseButtons: reverseButtons  }
 
     });
 
-   dialogRef.afterClosed().subscribe((result) => {
+   this.ref.onClose.subscribe((result: boolean) => {
     if (result) {
 
       let id = this.service.student_id;
@@ -153,7 +166,7 @@ export class ViewStudentDetailsComponent implements OnInit{
             // this.openErrorDialog(data.message);
           } else {
             // this.openSuccessDialog();
-            this.dialogRef.close()
+            this.ref.close()
           }
         },
         (error) => {
@@ -166,46 +179,38 @@ export class ViewStudentDetailsComponent implements OnInit{
 }
 
 disableStudentById(reverseButtons:boolean){
-  const dialogRef = this.dialog.open(ConfirmDialogueComponent, {
+  this.ref = this.dialogService.open(ConfirmDialogueComponent, {
     width: '250px',
-    data: { title: 'Confirm Update', message: 'Are you sure you want to deactivate this customer?', reverseButtons: reverseButtons }
+    data: { title: 'Confirm Update', message: 'Are you sure you want to deactivate this student?', reverseButtons: reverseButtons }
   });
 
-  dialogRef.afterClosed().subscribe((result) => {
+  this.ref.onClose.subscribe((result: boolean) => {
     if (result) {
   let id = this.service.student_id;
-
-  const updatedBy = {
-    // student_id: this.studentid
-  }
 
   this.service.disableStudent(id).subscribe((data) => {
     console.log(data)
     // this.openSuccessDialog();
-    this.dialogRef.close()
+    this.ref.close();
   });
 }
 });
 }
 
 enableCustomerById(reverseButtons:boolean){
-  const dialogRef = this.dialog.open(ConfirmDialogueComponent, {
+  this.ref = this.dialogService.open(ConfirmDialogueComponent, {
     width: '250px',
-    data: { title: 'Confirm Update', message: 'Are you sure you want to activate this customer?', reverseButtons: reverseButtons }
+    data: { title: 'Confirm Update', message: 'Are you sure you want to activate this student?', reverseButtons: reverseButtons }
   });
 
-  dialogRef.afterClosed().subscribe((result) => {
+  this.ref.onClose.subscribe((result: boolean) => {
     if (result) {
   let id = this.service.student_id;
-
-  const updatedBy = {
-    // student_id: this.studentid
-  }
 
   this.service.activateStudent(id).subscribe((data) => {
     console.log(data)
     // this.openSuccessDialog();
-    this.dialogRef.close()
+    this.ref.close();
   });
  }
 });
