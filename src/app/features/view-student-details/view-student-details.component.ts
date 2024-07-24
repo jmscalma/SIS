@@ -2,11 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { AppService } from '../../app.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogRef } from '@angular/cdk/dialog';
-// import { MatDialogRef } from '@angular/material/dialog';
-import { ConfirmDialogueComponent } from '../confirmation-dialogue/confirm-dialogue/confirm-dialogue.component';
-// import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../shared/dialog/confirm-dialog/confirm-dialog.component';
 import { DynamicDialogConfig, DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import { AddressValidator,
   NameValidator,
@@ -14,6 +10,7 @@ import { AddressValidator,
   EmailValidator
 } from '../../shared/validators/validators';
 import { ERROR_MESSAGES } from '../../shared/constants/constants';
+import { SuccessDialogComponent } from '../../shared/dialog/success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-view-student-details',
@@ -29,7 +26,10 @@ export class ViewStudentDetailsComponent implements OnInit{
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private dialogService: DialogService,
-  ) {}
+  ) {
+    console.log("DialogRef:", this.ref);
+    console.log("DialogConfig:", this.config);
+  }
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -41,11 +41,13 @@ export class ViewStudentDetailsComponent implements OnInit{
 
   //Variables
   civilStatusOptions: { label: string, value: string }[] = [];
+  civilStatus: string[] = ['Single', 'Married', 'Widowed', 'Separated'];
   selectedStatus!: any;
   completename!: string;
   fulladdress!: string;
   contactno!: string;
   email!: string;
+  civilstatus!: string;
   studentid: any;
   isCloseHovered: boolean = false;
   isEditHovered: boolean = false;
@@ -61,6 +63,8 @@ export class ViewStudentDetailsComponent implements OnInit{
   isEnableHovered: boolean = false;
   isDisableHovered: boolean = false;
   errorMessage: any;
+  LoginId: any = localStorage.getItem('CognitoIdentityServiceProvider.284g4btkfvbd4odhdon8o0niuj.LastAuthUser')
+
 
    //error message
    invalidAddress = ERROR_MESSAGES.invalidAddress;
@@ -75,20 +79,32 @@ export class ViewStudentDetailsComponent implements OnInit{
     cnCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, PhoneNumberValidator]],
     eCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, EmailValidator]],
     ecnCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, PhoneNumberValidator]],
+    csCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required]],
     lsaCtrl: [{ value: '', disabled: !this.isEditable }, [Validators.required, AddressValidator]],
   });
 
-  closeDialog(){
-    this.ref.close()
+  closeDialog() {
+    console.log("Closing dialog", this.ref);
+    if (this.ref) {
+      this.ref.close();
+    } else {
+      console.error("DynamicDialogRef is not available");
+    }
   }
 
   isEditableBtn(): void {
-    this.isEditable = !this.isEditable;
-    if (this.isEditable) {
-      this.piForm.enable();
-    } else {
-      this.piForm.disable();
+    if (this.status !== 'Disabled') {
+      this.isEditable = !this.isEditable;
+      if (this.isEditable) {
+        this.piForm.enable();
+      } else {
+        this.piForm.disable();
+      }
     }
+  }
+
+  populateCivilStatusOptions() {
+    this.civilStatusOptions = this.civilStatus.map(status => ({ label: status, value: status }));
   }
 
   getStudentById(studentId: number) {
@@ -104,6 +120,7 @@ export class ViewStudentDetailsComponent implements OnInit{
         this.fulladdress = data.data[0].address;
         this.contactno = data.data[0].contact_no;
         this.email = data.data[0].email;
+        this.civilstatus = data.data[0].civil_status;
         this.emergencycontactno = data.data[0].emergency_contact_no;
         this.schoolattended = data.data[0].last_school_attended;
         this.status = data.data[0].status;
@@ -114,6 +131,7 @@ export class ViewStudentDetailsComponent implements OnInit{
           cnCtrl: this.contactno,
           eCtrl: this.email,
           ecnCtrl: this.emergencycontactno,
+          csCtrl: this.civilstatus,
           lsaCtrl: this.schoolattended,
         });
 
@@ -126,14 +144,16 @@ export class ViewStudentDetailsComponent implements OnInit{
     );
   }
 
+
+
   editStudentDetails(reverseButtons: boolean) {
-    this.ref = this.dialogService.open(ConfirmDialogueComponent, {
-      width: '250px',
-      data: { title: 'Confirm Update', message: 'Are you sure you want to update this supllies details?', reverseButtons: reverseButtons  }
+    const confirmDialogRef = this.dialogService.open(ConfirmDialogComponent, {
+      width: '360px',
+      data: { title: 'Confirm Update', message: 'Are you sure you want to update this student details?', reverseButtons: reverseButtons  }
 
     });
 
-   this.ref.onClose.subscribe((result: boolean) => {
+   confirmDialogRef.onClose.subscribe((result: boolean) => {
     if (result) {
 
       let id = this.service.student_id;
@@ -145,6 +165,7 @@ export class ViewStudentDetailsComponent implements OnInit{
       const address = this.piForm.get('aCtrl')?.value;
       const contactNumber = this.piForm.get('cnCtrl')?.value;
       const email = this.piForm.get('eCtrl')?.value;
+      const civilstatus = this.piForm.get('csCtrl')?.value;
       const emergencyContact = this.piForm.get('ecnCtrl')?.value;
       const lastSchoolAttended = this.piForm.get('lsaCtrl')?.value;
 
@@ -153,6 +174,7 @@ export class ViewStudentDetailsComponent implements OnInit{
         address: address,
         contact_no: contactNumber,
         email: email,
+        civil_status: civilstatus,
         emergency_contact_no: emergencyContact,
         last_school_attended: lastSchoolAttended,
         student_id: this.studentid,
@@ -165,8 +187,8 @@ export class ViewStudentDetailsComponent implements OnInit{
           if (data.message === 'No changes made.') {
             // this.openErrorDialog(data.message);
           } else {
-            // this.openSuccessDialog();
-            this.ref.close()
+            this.showDialog();
+            this.closeDialog();
           }
         },
         (error) => {
@@ -178,43 +200,60 @@ export class ViewStudentDetailsComponent implements OnInit{
   });
 }
 
-disableStudentById(reverseButtons:boolean){
-  this.ref = this.dialogService.open(ConfirmDialogueComponent, {
-    width: '250px',
-    data: { title: 'Confirm Update', message: 'Are you sure you want to deactivate this student?', reverseButtons: reverseButtons }
+disableStudentById(reverseButtons: boolean) {
+  const confirmDialogRef = this.dialogService.open(ConfirmDialogComponent, {
+    header: 'Update Confirmation',
+    width: '360px',
+    data: { message: 'Are you sure you want to deactivate this student?', reverseButtons: reverseButtons }
   });
 
-  this.ref.onClose.subscribe((result: boolean) => {
-    if (result) {
-  let id = this.service.student_id;
+  const regdata = {
 
-  this.service.disableStudent(id).subscribe((data) => {
-    console.log(data)
-    // this.openSuccessDialog();
-    this.ref.close();
+    disabled_by: this.LoginId
+  }
+
+  confirmDialogRef.onClose.subscribe((result: boolean) => {
+    if (result) {
+      let id = this.service.student_id;
+      this.service.disableStudent(regdata, id).subscribe((data) => {
+        console.log('Disable Response:', data);
+        this.showDialog();
+        this.closeDialog();
+      });
+    }
   });
 }
-});
+
+enableCustomerById(reverseButtons: boolean) {
+  const confirmDialogRef = this.dialogService.open(ConfirmDialogComponent, {
+    header: 'Update Confirmation',
+    width: '360px',
+    data: { message: 'Are you sure you want to activate this student?', reverseButtons: reverseButtons }
+  });
+
+  // const regdata = {
+
+  //   enabled_by: this.LoginId
+  // }
+
+  confirmDialogRef.onClose.subscribe((result: boolean) => {
+    if (result) {
+      let id = this.service.student_id;
+      this.service.activateStudent(id).subscribe((data) => {
+        console.log('Activate Response:', data);
+        this.showDialog();
+        this.closeDialog();
+      });
+    }
+  });
 }
 
-enableCustomerById(reverseButtons:boolean){
-  this.ref = this.dialogService.open(ConfirmDialogueComponent, {
-    width: '250px',
-    data: { title: 'Confirm Update', message: 'Are you sure you want to activate this student?', reverseButtons: reverseButtons }
+ showDialog() {
+  this.dialogService.open(SuccessDialogComponent, {
+    header: 'SUCCESS',
+    width: '20%',
+    height: '30%'
   });
-
-  this.ref.onClose.subscribe((result: boolean) => {
-    if (result) {
-  let id = this.service.student_id;
-
-  this.service.activateStudent(id).subscribe((data) => {
-    console.log(data)
-    // this.openSuccessDialog();
-    this.ref.close();
-  });
- }
-});
- }
-
+}
 
 }

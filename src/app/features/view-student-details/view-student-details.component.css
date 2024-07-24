@@ -152,6 +152,10 @@ component.css
   display: flex;
 }
 
+.dropdown-field {
+  width: 250px; /* Adjust the width as needed */
+}
+
 .button-style {
   display: flex;
   justify-content: flex-end;
@@ -279,8 +283,16 @@ input[type="number"] {
 .flex{
   display: flex;
   flex-direction: column;
-  padding-left: 5%;
+  padding-left: 1%;
   padding-top: 4%;
+}
+
+.address-container{
+  width: 48%;
+}
+
+.address{
+  width: 100%;
 }
 
 .input-container{

@@ -56,7 +56,7 @@ export class ForceChangePasswordComponent {
       console.log(isSignedIn, nextStep);
       this.isLogin = false;
       if (isSignedIn && nextStep.signInStep === 'DONE'){
-        this.router.navigate(['add-student']);
+        this.router.navigate(['dashboard']);
       }
     } catch (error: any) {
       this.isLogin = false;

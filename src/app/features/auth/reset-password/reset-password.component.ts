@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SuccessDialogComponent } from '../../../shared/dialog/success-dialog/success-dialog.component';
+import { ErrorDialogComponent } from '../../../shared/dialog/error-dialog/error-dialog.component';
 
 
 @Component({
@@ -52,10 +54,10 @@ export class ResetPasswordComponent implements OnInit{
           oldPassword: this.oldPassword,
           newPassword: this.newPassword
         });
-        if (this.ref) {
-          this.ref.close();
-        }
+        this.successDialog();
+        this.closeDialog();
       } catch (err) {
+        this.showErrorDialog('Failed to update Password');
         this.errorMessage = 'Failed to update password. Please try again.';
         console.log(err);
       }
@@ -64,9 +66,29 @@ export class ResetPasswordComponent implements OnInit{
     }
   }
 
+  successDialog() {
+    this.dialogService.open(SuccessDialogComponent, {
+      header: 'SUCCESS',
+      width: '20%',
+      height: '30%'
+    });
+  }
+
+  showErrorDialog(errorMessage: string) {
+    const ref = this.dialogService.open(ErrorDialogComponent, {
+      data: { message: errorMessage },
+      header: 'Error',
+      width: '25%',
+      height: '40%'
+    });
+  }
+
   closeDialog() {
+    console.log("Closing dialog", this.ref);
     if (this.ref) {
       this.ref.close();
+    } else {
+      console.error("DynamicDialogRef is not available");
     }
   }
 

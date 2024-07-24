@@ -5,7 +5,7 @@
       <div class="button-search-container">
         <button class="button-addsupplier" pButton color="primary" (click)="showDialog()">
           <mat-icon>add</mat-icon>
-          Add Students
+          Add Student
         </button>
 
         <div class="search-container">
@@ -61,7 +61,7 @@
 
   <p-dialog class="header" header="Student Information" [draggable]="false" [modal]="true" [(visible)]="visible" [style]="{ width: '75rem', height: '35rem' }">
     <p-stepper>
-      <p-stepperPanel header="Student Information">
+      <p-stepperPanel>
         <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
       <div class="main-container grid-container">
       <div class="flex-container padding">
@@ -85,7 +85,7 @@
     </div>
 
     <div class="flex-contact flex grid-item">
-      <label>Contact No.</label>
+      <label>Contact No. *</label>
     <p-inputMask
     mask="99999999999"
     [(ngModel)]="contactno"
@@ -99,7 +99,7 @@
 
   <div class="flex-box">
   <div class="flex align-items-center gap-3 mb-3 grid-item">
-    <label for="username" class="font-semibold w-6rem">Email Address*</label>
+    <label for="username" class="font-semibold w-6rem">Email Address *</label>
     <input [(ngModel)]="email" formControlName="eaCtrl" pInputText id="email" class="flex-auto" autocomplete="off" />
     <div *ngIf="piForm.get('eaCtrl')?.invalid && (piForm.get('eaCtrl')?.dirty || piForm.get('eaCtrl')?.touched)" class="error-message">
       {{ invalidEmail }}
@@ -107,17 +107,18 @@
   </div>
 
   <div class="card flex justify-content-center grid-item">
-    <label>Civil Status*</label>
+    <label>Civil Status *</label>
     <p-dropdown
         [options]="civilStatusOptions"
         [(ngModel)]="selectedStatus"
+        formControlName="csCtrl"
         [checkmark]="true"
         class="dropdown-field">
     </p-dropdown>
   </div>
 
   <div class="flex-contact flex grid-item">
-    <label>Emergency Contact</label>
+    <label>Emergency Contact *</label>
   <p-inputMask
   mask="99999999999"
   [(ngModel)]="emergencycontactno"
@@ -127,17 +128,18 @@
     {{ invalidPhoneNumber }}
   </div>
 </div>
-<br/>
 
 <div class="flex-box">
-<div class="flex align-items-center gap-3 mb-3 grid-item">
-  <label for="username" class="font-semibold w-6rem">Last School Attended*</label>
-  <input [(ngModel)]="schoolattended" formControlName="lsaCtrl" pInputText id="schoolattended" class="flex-auto" autocomplete="off"/>
-  <div *ngIf="piForm.get('lsaCtrl')?.invalid && (piForm.get('lsaCtrl')?.dirty || piForm.get('lsaCtrl')?.touched)" class="error-message">
-    {{ invalidAddress }}
+  <div class="flex align-items-center gap-3 mb-3 grid-item school-attended">
+    <label for="lastschoolattended" class="font-semibold w-6rem">Last School Attended *</label>
+    <input [(ngModel)]="schoolattended" formControlName="lsaCtrl" pInputText id="schoolattended" class="flex-auto" autocomplete="off"/>
+    <div *ngIf="piForm.get('lsaCtrl')?.invalid && (piForm.get('lsaCtrl')?.dirty || piForm.get('lsaCtrl')?.touched)" class="error-message">
+      {{ invalidAddress }}
+    </div>
   </div>
-</div>
-</div>
+  </div>
+<br/>
+
 </div>
 </form>
 </div>
@@ -170,12 +172,12 @@
   </div>
     </ng-template>
   </p-stepperPanel> -->
-
+<!--
   <p-stepperPanel header="Done">
     <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
 
     </ng-template>
-  </p-stepperPanel>
+  </p-stepperPanel> -->
 
   </p-stepper>
   </p-dialog>

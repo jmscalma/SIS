@@ -8,11 +8,11 @@
             <mat-icon>block</mat-icon>
             <span *ngIf="isDisableHovered">Update to Disable</span>
           </button>
-          <button class="button-label" mat-button *ngIf="status == 'Disabled'" (click)="enableCustomerById(true)" [hidden]="!isEditable" (mouseenter)="isEnableHovered = true" (mouseleave)="isEnableHovered = false">
+          <button class="button-label" mat-button *ngIf="status == 'Disabled'" (click)="enableCustomerById(true)" (mouseenter)="isEnableHovered = true" (mouseleave)="isEnableHovered = false">
             <mat-icon>check_circle</mat-icon>
             <span *ngIf="isEnableHovered">Update to Enable</span>
           </button>
-          <button class="button-label" mat-button (click)="isEditableBtn()" (mouseenter)="isEditHovered = true" (mouseleave)="isEditHovered = false">
+          <button class="button-label" mat-button *ngIf="status !== 'Disabled'" (click)="isEditableBtn()" (mouseenter)="isEditHovered = true" (mouseleave)="isEditHovered = false">
             <mat-icon *ngIf="!isEditHovered">edit</mat-icon>
             <span *ngIf="isEditHovered">Edit</span>
           </button>
@@ -29,7 +29,7 @@
 
         <div class="input-container">
         <div class="flex flex-column gap-2">
-          <label for="username">Username</label>
+          <label for="username">Student Name *</label>
           <input
               pInputText
               id="username"
@@ -39,21 +39,22 @@
               </div>
       </div>
 
-      <div class="flex flex-column gap-2">
-        <label for="username">Address</label>
+      <div class="flex flex-column gap-2 address-container">
+        <label for="username">Address *</label>
         <input
             pInputText
             id="address"
-            formControlName="aCtrl" />
+            formControlName="aCtrl"
+            class="address"/>
             <div *ngIf="piForm.get('caCtrl')?.invalid && (piForm.get('caCtrl')?.dirty || piForm.get('caCtrl')?.touched)" class="error-message">
               {{ invalidAddress }}
             </div>
     </div>
 
     <div class="flex flex-column gap-2">
-      <label for="username">Contact No.</label>
-      <input
-          pInputText
+      <label for="username">Contact No. *</label>
+      <p-inputMask
+          mask="99999999999"
           id="contactno"
           formControlName="cnCtrl" />
           <div *ngIf="piForm.get('pnCtrl')?.invalid && (piForm.get('pnCtrl')?.dirty || piForm.get('pnCtrl')?.touched)" class="error-message">
@@ -65,7 +66,7 @@
 
     <div class="input-container">
     <div class="flex flex-column gap-2">
-    <label for="username">Email</label>
+    <label for="username">Email *</label>
     <input
         pInputText
         id="email"
@@ -75,10 +76,16 @@
         </div>
     </div>
 
+    <div class="card flex justify-content-center grid-item">
+      <label for="csCtrl">Civil Status *</label>
+        <p-dropdown class="dropdown-field" id="csCtrl" formControlName="csCtrl" [options]="civilStatus" [(ngModel)]="civilstatus">
+        </p-dropdown>
+    </div>
+
     <div class="flex flex-column gap-2">
-    <label for="emergencycontactno">Emergency Contact No.</label>
-    <input
-        pInputText
+    <label for="emergencycontactno">Emergency Contact No. *</label>
+    <p-inputMask
+        mask="99999999999"
         id="email"
         formControlName="ecnCtrl" />
         <div *ngIf="piForm.get('ecCtrl')?.invalid && (piForm.get('ecCtrl')?.dirty || piForm.get('ecCtrl')?.touched)" class="error-message">
@@ -87,7 +94,7 @@
     </div>
 
     <div class="flex flex-column gap-2">
-    <label for="schoolattended">Last School Attended</label>
+    <label for="schoolattended">Last School Attended *</label>
     <input
         pInputText
         id="schoolattended"

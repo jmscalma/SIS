@@ -12,8 +12,8 @@ import { MatSort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ConfirmDialogueComponent } from '../confirmation-dialogue/confirm-dialogue/confirm-dialogue.component';
 import { Validators } from '@angular/forms';
+import { ConfirmDialogComponent } from '../../shared/dialog/confirm-dialog/confirm-dialog.component';
 import { AddressValidator,
          NameValidator,
          PhoneNumberValidator,
@@ -21,6 +21,8 @@ import { AddressValidator,
        } from '../../shared/validators/validators';
 import { FormBuilder } from '@angular/forms';
 import { ERROR_MESSAGES } from '../../shared/constants/constants';
+import { ErrorDialogComponent } from '../../shared/dialog/error-dialog/error-dialog.component';
+import { SuccessDialogComponent } from '../../shared/dialog/success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-add-student',
@@ -73,6 +75,7 @@ export class AddStudentComponent implements OnInit {
   sortField: string = 'student_name';  // Default sort field
   sortOrder: number = 1;  // Default sort order (1 for ascending, -1 for descending)
   rowsPerPageOptions: number[] = [5, 10, 20, 50];
+  LoginId: any = localStorage.getItem('CognitoIdentityServiceProvider.284g4btkfvbd4odhdon8o0niuj.LastAuthUser')
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -97,6 +100,7 @@ export class AddStudentComponent implements OnInit {
     pnCtrl: ['', [Validators.required, PhoneNumberValidator]],
     eaCtrl: ['', [Validators.required, Validators.email, EmailValidator]],
     ecCtrl: ['', [Validators.required, PhoneNumberValidator]],
+    csCtrl: ['', Validators.required],
     lsaCtrl: ['', [Validators.required, AddressValidator]]
 
   });
@@ -128,14 +132,20 @@ export class AddStudentComponent implements OnInit {
   }
 
   getAllStudents(pageNo: number, pageSize: number, keyword: string) {
-    this.service.getAllStudent(pageNo, pageSize, keyword)
-      .subscribe((data: any) => {
+    this.service.getAllStudent(pageNo, pageSize, keyword).subscribe(
+      (data: any) => {
         this.dataFiles = data.data;
         this.total = data.total;
         this.dataSource = data.data;
-        this.service.search = data.result;
-        console.log('keyword', keyword)
-      });
+        console.log('Students fetched successfully');
+      },
+      (error) => {
+        console.error('Error fetching students:', error);
+        if (error.status === 401) {
+          // Handle unauthorized error (e.g., redirect to login)
+        }
+      }
+    );
   }
 
   showDialog() {
@@ -149,17 +159,50 @@ addStudent(){
     "address": this.fulladdress,
     "contact_no": this.contactno,
     "email": this.email,
-    "civil_status": this.selectedStatus,
+    "civil_status": this.piForm.get('csCtrl')?.value,
     "emergency_contact_no": this.emergencycontactno,
     "last_school_attended": this.schoolattended,
-    "created_by": String(this.mockUserId)
+    "created_by": this.LoginId,
   }
 
   this.service.addStudent(regdata).subscribe(
     (data) => {
       console.log(regdata)
+      this.successDialog();
+      this.closeDialog();
+    },
+    (error) => {
+      console.error('Error adding student:', error);
+      this.showErrorDialog('Failed to add student');
     }
   )
+}
+
+successDialog() {
+  this.dialogService.open(SuccessDialogComponent, {
+    header: 'SUCCESS',
+    width: '20%',
+    height: '30%'
+  });
+}
+
+
+closeDialog() {
+  console.log("Closing dialog", this.ref);
+  if (this.ref) {
+    this.ref.close();
+  } else {
+    console.error("DynamicDialogRef is not available");
+  }
+}
+
+showErrorDialog(errorMessage: string) {
+  const ref = this.dialogService.open(ErrorDialogComponent, {
+    data: { message: errorMessage },
+    header: 'Error',
+    width: '25%',
+    height: '40%'
+  });
 }
 
 getStudentDetails(row: any) {

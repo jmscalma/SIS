@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppService } from '../../app.service';
-import { ConfirmDialogueComponent } from '../../features/confirmation-dialogue/confirm-dialogue/confirm-dialogue.component';
+import { ConfirmDialogComponent } from '../../shared/dialog/confirm-dialog/confirm-dialog.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Dialog } from 'primeng/dialog';
 import { result } from 'lodash';
@@ -80,7 +80,7 @@ export class SidenavComponent {
   }
 
   show() {
-    this.ref = this.dialogService.open(ConfirmDialogueComponent, {
+    this.ref = this.dialogService.open(ConfirmDialogComponent, {
       header: 'Logout Confirmation',
       width: '300px',
       contentStyle: { 'max-height': '350px', 'overflow': 'auto' },

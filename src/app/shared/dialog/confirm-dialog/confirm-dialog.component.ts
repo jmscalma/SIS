@@ -3,11 +3,11 @@ import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 
 
 @Component({
-  selector: 'app-confirm-dialogue',
-  templateUrl: './confirm-dialogue.component.html',
-  styleUrl: './confirm-dialogue.component.css'
+  selector: 'app-confirm-dialog',
+  templateUrl: './confirm-dialog.component.html',
+  styleUrl: './confirm-dialog.component.css'
 })
-export class ConfirmDialogueComponent implements OnInit{
+export class ConfirmDialogComponent {
 
   title!: string;
   message!: string;

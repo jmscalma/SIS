@@ -32,7 +32,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmDialogueComponent } from './features/confirmation-dialogue/confirm-dialogue/confirm-dialogue.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
@@ -62,6 +61,9 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { MainDashboardComponent } from './features/main-dashboard/main-dashboard.component';
+import { ConfirmDialogComponent } from './shared/dialog/confirm-dialog/confirm-dialog.component';
+import { SuccessDialogComponent } from './shared/dialog/success-dialog/success-dialog.component';
+import { ErrorDialogComponent } from './shared/dialog/error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
@@ -69,10 +71,13 @@ import { MainDashboardComponent } from './features/main-dashboard/main-dashboard
     LoginComponent,
     AddStudentComponent,
     ForceChangePasswordComponent,
-    ConfirmDialogueComponent,
     ViewStudentDetailsComponent,
-    MainDashboardComponent
+    MainDashboardComponent,
+    ConfirmDialogComponent,
+    SuccessDialogComponent,
+    ErrorDialogComponent
   ],
+
   imports: [
     MatFormField,
     MatSortModule,
@@ -122,6 +127,7 @@ import { MainDashboardComponent } from './features/main-dashboard/main-dashboard
     MatTableModule,
     PaginatorModule
   ],
+
   providers: [MessageService, ConfirmationService, provideAnimationsAsync(), provideNativeDateAdapter(), DialogService, DynamicDialogRef, DynamicDialogConfig],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

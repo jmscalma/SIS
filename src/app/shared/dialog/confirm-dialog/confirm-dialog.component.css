@@ -29,6 +29,11 @@ div[mat-dialog-content] {
   justify-content: space-evenly;
   gap: 20%;
   padding-top: 10%;
+  padding-bottom: 5%;
+}
+
+.title, .message{
+  padding-left: 5%;
 }
 
 ng-deep .p-dialog .p-dialog-content {

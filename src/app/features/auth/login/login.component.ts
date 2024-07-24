@@ -28,6 +28,19 @@ export class LoginComponent implements OnInit{
     this.logout();
 }
 
+async currentSession() {
+  try {
+    console.log('gasgs', await fetchAuthSession())
+    const { accessToken, idToken } = (await fetchAuthSession()).tokens ?? {};
+    console.log(accessToken, idToken)
+    this.accessToken = accessToken
+    sessionStorage.setItem('AccessToken', this.accessToken);
+    console.log(this.accessToken)
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 forgotPasswordDialog(){
   this,this.router.navigate(['/forgot-password'])
   // this.dialog.open(ForgotPasswordComponent)
@@ -57,6 +70,7 @@ async login() {
     if (nextStep.signInStep === 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD_REQUIRED') {
       this.router.navigate(['change-password']);
     } else if (nextStep.signInStep === 'DONE') {
+      this.currentSession();
       this.authService.redirectingToDashboard();
       console.log('Redirected Successfully')
     }

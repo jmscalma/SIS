@@ -29,11 +29,31 @@ export class AppService {
   constructor(public router: Router, public http: HttpClient) {  }
 
   getAllStudent(pageNo: number, pageSize: number, keyword: string): Observable<any[]> {
-    let options = { headers: new HttpHeaders({'Content-Type': 'application/json'}) };
+    this.jwttoken = sessionStorage.getItem('AccessToken');
+    if (!this.jwttoken) {
+      console.error('No token found in sessionStorage');
+      // Handle missing token scenario appropriately
+      return throwError('No token found');
+    }
+    console.log('Authorization token:', this.jwttoken);
+    let options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.jwttoken}`
+      })
+    };
+
     return this.http.get<any[]>(`${this.urlgetallstudent}?pageNo=${pageNo}&pageSize=${pageSize}&keyword=${keyword}`, options).pipe(
       map(data => data),
       retry(1),
-      catchError(this.handleError)
+      catchError(error => {
+        if (error.status === 401) {
+          console.error('Unauthorized request - 401');
+          this.router.navigate(['/login'])
+          // Additional handling like refreshing token or redirecting to login
+        }
+        return throwError(error);
+      })
     );
   }
 
@@ -57,10 +77,10 @@ export class AppService {
     );
   }
 
-  disableStudent(id: any){
+  disableStudent(form: any, id: any){
     let headers = new HttpHeaders({ 'Content-Type': 'application/json'});
 
-    return this.http.patch<any>(`${this.urlstudent}/disable?student_id=${id}`, { headers }).pipe(
+    return this.http.patch<any>(`${this.urlstudent}/disable?student_id=${id}`, form, { headers }).pipe(
       catchError(this.handleError)
     );
   }
