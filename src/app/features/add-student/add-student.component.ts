@@ -1,28 +1,26 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { signOut } from 'aws-amplify/auth';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { AppService } from '../../app.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { debounce } from 'lodash';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ViewStudentDetailsComponent } from '../view-student-details/view-student-details.component';
 // import { DataSource } from 'primeng/table';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { Subject } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import { Validators } from '@angular/forms';
-import { ConfirmDialogComponent } from '../../shared/dialog/confirm-dialog/confirm-dialog.component';
 import { AddressValidator,
          NameValidator,
          PhoneNumberValidator,
-         EmailValidator
+         EmailValidator,
+         LastSchoolAttendedValidator
        } from '../../shared/validators/validators';
 import { FormBuilder } from '@angular/forms';
 import { ERROR_MESSAGES } from '../../shared/constants/constants';
 import { ErrorDialogComponent } from '../../shared/dialog/error-dialog/error-dialog.component';
 import { SuccessDialogComponent } from '../../shared/dialog/success-dialog/success-dialog.component';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-add-student',
@@ -33,12 +31,12 @@ export class AddStudentComponent implements OnInit {
 
   constructor(private dialogService: DialogService,
               private service: AppService,
+              private authService: AuthService,
               private dialog: MatDialog,
               private router: Router,
               private confirmService: ConfirmationService,
               private message: MessageService,
               private _formBuilder: FormBuilder,){
-
   }
 
   displayedSupplies: any[] = [
@@ -58,7 +56,10 @@ export class AddStudentComponent implements OnInit {
   civilStatus: string[] = ['Single', 'Married', 'Widowed', 'Separated'];
   listOfRequirements: any[] = [];
   selectedStatus!: any;
-  civilStatusOptions: { label: string, value: string }[] = [];
+  civilStatusOptions = [
+    { label: 'Single', value: 'single' },
+    { label: 'Married', value: 'married' },
+  ];
   visible: boolean = false;
   completename!: string;
   fulladdress!: string;
@@ -71,7 +72,7 @@ export class AddStudentComponent implements OnInit {
   total: number = 0;
   dataFiles: any;
   keyword: string = '';
-  mockUserId = 2;
+  existingStudents: any[] = [];
   sortField: string = 'student_name';  // Default sort field
   sortOrder: number = 1;  // Default sort order (1 for ascending, -1 for descending)
   rowsPerPageOptions: number[] = [5, 10, 20, 50];
@@ -83,7 +84,7 @@ export class AddStudentComponent implements OnInit {
   ngOnInit() {
     this.applyFilter = debounce(this.applyFilter, 1000);
     this.civilStatusOptions = this.civilStatus.map(status => ({ label: status, value: status }));
-    this.service.currentAuthenticatedUser();
+    this.authService.currentAuthenticatedUser();
     this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
   }
 
@@ -92,109 +93,107 @@ export class AddStudentComponent implements OnInit {
   invalidName = ERROR_MESSAGES.invalidName;
   invalidPhoneNumber = ERROR_MESSAGES.invalidPhoneNumber;
   invalidEmail = ERROR_MESSAGES.invalidEmail;
+  invalidLastSchoolAttended = ERROR_MESSAGES.invalidLastSchoolAttended;
+
   //form groups
   piForm =  this._formBuilder.group({
-
     cnCtrl: ['', [Validators.required, NameValidator()]],
     caCtrl: ['', [Validators.required, AddressValidator]],
     pnCtrl: ['', [Validators.required, PhoneNumberValidator]],
     eaCtrl: ['', [Validators.required, Validators.email, EmailValidator]],
     ecCtrl: ['', [Validators.required, PhoneNumberValidator]],
     csCtrl: ['', Validators.required],
-    lsaCtrl: ['', [Validators.required, AddressValidator]]
+    lsaCtrl: ['', [Validators.required, LastSchoolAttendedValidator]]
 
   });
 
-  logoutBtn(event: Event) {
-    this.confirmService.confirm({
-        target: event.target as EventTarget,
-        message: 'Are you sure that you want to logout?',
-        header: 'Confirmation',
-        icon: 'pi pi-exclamation-triangle',
-        acceptIcon:"none",
-        rejectIcon:"none",
-        rejectButtonStyleClass:"p-button-text",
-        accept: () => {
-            this.message.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-        },
-        reject: () => {
-            this.message.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
-    });
-}
-
-  logout() {
-    this.service.handleSignOut().then (() =>{
-      this.router.navigate(['/login']);
-    }).catch((error)=>{
-      console.log ("something went wrong")
-    });
-  }
-
   getAllStudents(pageNo: number, pageSize: number, keyword: string) {
+    this.service.jwttoken = String(sessionStorage.getItem('IdToken'));
     this.service.getAllStudent(pageNo, pageSize, keyword).subscribe(
-      (data: any) => {
-        this.dataFiles = data.data;
-        this.total = data.total;
-        this.dataSource = data.data;
-        console.log('Students fetched successfully');
+      (response: any) => {
+        if (response && response.data && response.data.length > 0) {
+          const [studentsData, totalData] = response.data;
+          this.dataFiles = studentsData;
+          this.existingStudents = studentsData; // Store existing students
+
+          if (totalData && totalData.length > 0 && totalData[0].total) {
+            this.total = totalData[0].total;
+          } else {
+            this.total = 0; // Handle case where total is not present
+          }
+
+          this.dataSource = studentsData;
+
+          // Apply sorting if sort field is set
+          if (this.sortField) {
+            this.sortData();
+          }
+        } else {
+          this.dataSource = [];
+          this.total = 0; // Handle case where data is not present
+        }
       },
       (error) => {
         console.error('Error fetching students:', error);
-        if (error.status === 401) {
-          // Handle unauthorized error (e.g., redirect to login)
-        }
       }
     );
   }
+
 
   showDialog() {
     this.visible = true;
   }
 
-addStudent(){
+  addStudent() {
 
-  const regdata = {
-    "student_name": this.completename,
-    "address": this.fulladdress,
-    "contact_no": this.contactno,
-    "email": this.email,
-    "civil_status": this.piForm.get('csCtrl')?.value,
-    "emergency_contact_no": this.emergencycontactno,
-    "last_school_attended": this.schoolattended,
-    "created_by": this.LoginId,
-  }
+    // Check for duplicate email
+    const emailExists = this.existingStudents.some(student => student.email === this.email);
 
-  this.service.addStudent(regdata).subscribe(
-    (data) => {
-      console.log(regdata)
-      this.successDialog();
-      this.closeDialog();
-    },
-    (error) => {
-      console.error('Error adding student:', error);
-      this.showErrorDialog('Failed to add student');
+    if (emailExists) {
+      this.showErrorDialog('Email address already exists. Please use a different email.');
+      return; // Prevent adding the student
     }
-  )
-}
+
+    const regdata = {
+      "student_name": this.piForm.get('cnCtrl')?.value,
+      "address": this.piForm.get('caCtrl')?.value,
+      "contact_no": this.piForm.get('pnCtrl')?.value,
+      "email": this.piForm.get('eaCtrl')?.value,
+      "civil_status": this.piForm.get('csCtrl')?.value,
+      "emergency_contact_no": this.piForm.get('ecCtrl')?.value,
+      "last_school_attended": this.piForm.get('lsaCtrl')?.value,
+      "created_by": this.LoginId,
+    };
+
+    this.service.addStudent(regdata).subscribe(
+      (data) => {
+        this.successDialog();
+        this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
+        this.piForm.reset();
+      },
+      (error) => {
+        console.error('Error adding student:', error);
+        this.showErrorDialog('Failed to add student');
+      }
+    );
+  }
 
 successDialog() {
-  this.dialogService.open(SuccessDialogComponent, {
-    header: 'SUCCESS',
-    width: '20%',
-    height: '30%'
-  });
-}
-
-
-closeDialog() {
-  console.log("Closing dialog", this.ref);
+this.dialogService.open(SuccessDialogComponent, {
+  header: 'Success',
+  width: '30%',
+  height: '30%',
+  modal: true,
+  closable: false
+});
+// Close the dialog after 2 seconds (or any other logic you prefer)
+setTimeout(() => {
   if (this.ref) {
     this.ref.close();
-  } else {
-    console.error("DynamicDialogRef is not available");
   }
+}, 1000); // Adjust time as necessary
 }
+
 
 showErrorDialog(errorMessage: string) {
   const ref = this.dialogService.open(ErrorDialogComponent, {
@@ -206,9 +205,7 @@ showErrorDialog(errorMessage: string) {
 }
 
 getStudentDetails(row: any) {
-  console.log('row', row);
   this.service.student_id = row.student_id;
-
   const dialogRef = this.dialogService.open(ViewStudentDetailsComponent, {
     data: row,
     header: 'Student Details',
@@ -224,20 +221,34 @@ getStudentDetails(row: any) {
 applyFilter(value: string) {
   this.keyword = value.trim().toLowerCase();
   this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
-  console.log('keyword', this.keyword)
 }
 
 onPaginate(event: any) {
   this.pageNo = event.first / event.rows + 1;
   this.pageSize = event.rows;
-
-  this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
-  console.log('Pagination is working', this.pageSize, this.pageSize)
-}
-
-onSort(event: any) {
-  this.sortField = event.field;
-  this.sortOrder = event.order === 1 ? 1 : -1;  // PrimeNG order: 1 for ascending, -1 for descending
   this.getAllStudents(this.pageNo, this.pageSize, this.keyword);
 }
+
+
+sortData() {
+  console.log('Sorting data...');
+  console.log('Current sort field:', this.sortField);
+  console.log('Current sort order:', this.sortOrder);
+
+  this.dataSource.sort((a: any, b: any) => {
+    const fieldA = a[this.sortField]?.toString().toLowerCase() || '';
+    const fieldB = b[this.sortField]?.toString().toLowerCase() || '';
+
+    console.log(`Comparing ${fieldA} with ${fieldB}`);
+
+    const comparison = fieldA.localeCompare(fieldB);
+    const sorted = this.sortOrder * comparison;
+
+    console.log('Result of comparison:', sorted);
+    return sorted;
+  });
+
+  console.log('Sorted data:', this.dataSource);
+}
+
 }

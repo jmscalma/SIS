@@ -8,8 +8,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppService } from '../../app.service';
 import { ConfirmDialogComponent } from '../../shared/dialog/confirm-dialog/confirm-dialog.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { Dialog } from 'primeng/dialog';
-import { result } from 'lodash';
+import { AuthService } from '../../features/auth/auth.service';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -65,14 +64,14 @@ export class SidenavComponent {
     }
   }
 
-  constructor(private dialogService: DialogService, private router: Router, private service: AppService, private confirmationService: ConfirmationService, private message: MessageService) { }
+  constructor(private authService: AuthService, private dialogService: DialogService, private router: Router, private service: AppService, private confirmationService: ConfirmationService, private message: MessageService) { }
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
   }
 
   logouts() {
-    this.service.handleSignOut().then (() =>{
+    this.authService.handleSignOut().then (() =>{
       this.router.navigate(['/login']);
     }).catch((error)=>{
       console.log ("something went wrong")

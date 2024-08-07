@@ -5,7 +5,6 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Observable, catchError, map, retry, throwError } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { fetchAuthSession, signOut } from 'aws-amplify/auth';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
@@ -40,7 +39,7 @@ export class AuthService {
     try {
       await confirmResetPassword({ username, confirmationCode, newPassword });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -49,13 +48,13 @@ export class AuthService {
     switch (nextStep.resetPasswordStep) {
       case 'CONFIRM_RESET_PASSWORD_WITH_CODE':
         const codeDeliveryDetails = nextStep.codeDeliveryDetails;
-        console.log(
-          `Confirmation code was sent to ${codeDeliveryDetails.deliveryMedium}`
-        );
+        // console.log(
+        //   `Confirmation code was sent to ${codeDeliveryDetails.deliveryMedium}`
+        // );
         // Collect the confirmation code from the user and pass to confirmResetPassword.
         break;
       case 'DONE':
-        console.log('Successfully reset password.');
+        // console.log('Successfully reset password.');
         break;
     }
   }
@@ -65,7 +64,7 @@ export class AuthService {
       const output = await resetPassword({ username });
       this.handleResetPasswordNextSteps(output);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -76,7 +75,7 @@ export class AuthService {
     try {
       await updatePassword({ oldPassword, newPassword });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   }
 
@@ -85,12 +84,23 @@ export class AuthService {
       await signOut();
       this.isLoggedIn = false;
     } catch (error) {
-      console.log('error signing out: ', error);
+      // console.log('error signing out: ', error);
+    }
+  }
+
+  async currentAuthenticatedUser() {
+    try {
+      const { username, userId, signInDetails } = await getCurrentUser();
+      // console.log(`The username: ${username}`);
+      // console.log(`The userId: ${userId}`);
+      // console.log(`The signInDetails: ${signInDetails?.authFlowType}`);
+    } catch (err) {
+      console.log(err);
     }
   }
 
   redirectingToDashboard(){
-    this.router.navigate(['dashboard'])
+    this.router.navigate(['dashboard/main-dashboard'])
   }
 
   async handleSignIn({ username, password }: SignInInput) {
@@ -118,15 +128,14 @@ export class AuthService {
       const { accessToken, idToken } = (await fetchAuthSession()).tokens ?? {};
       if (accessToken && idToken){
         this.isLoggedIn = true;
-        this.router.navigate(['/dashboard'])
+        this.router.navigate(['dashboard/main-dashboard'])
       }else{
         this.isLoggedIn = false;
       }
-      console.log("isLoggedIn", this.isLoggedIn)
-      console.log(accessToken, idToken)
+      // console.log("isLoggedIn", this.isLoggedIn)
+      // console.log(accessToken, idToken)
     } catch (err) {
       console.log(err);
-      // this.dialog.open(ErrorMessageComponent, {data: { message: err}}).afterClosed().subscribe(data => {});
     }
   }
 

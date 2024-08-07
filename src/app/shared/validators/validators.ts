@@ -40,6 +40,19 @@ export function AddressValidator(): ValidatorFn {
   };
 }
 
+export function LastSchoolAttendedValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const value = control.value;
+
+    // Check if the value is provided and does not contain potentially harmful characters
+    if (!value || /^[a-zA-Z\s\-\.,#\/]+$/.test(value)) {
+      return null; // Valid
+    }
+
+    return { invalidSupplier: true }; // Invalid
+  };
+}
+
 //validator for email
 export function EmailValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {

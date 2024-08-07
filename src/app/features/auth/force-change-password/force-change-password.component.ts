@@ -53,7 +53,6 @@ export class ForceChangePasswordComponent {
       const {isSignedIn, nextStep} = await confirmSignIn({
         challengeResponse: this.password
       });
-      console.log(isSignedIn, nextStep);
       this.isLogin = false;
       if (isSignedIn && nextStep.signInStep === 'DONE'){
         this.router.navigate(['dashboard']);

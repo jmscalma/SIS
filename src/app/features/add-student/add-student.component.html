@@ -1,20 +1,20 @@
 <div class="card flex justify-content-center">
+
+  <div class="button-search-container">
+    <button class="button-addsupplier" pButton color="primary" (click)="showDialog()">
+      <mat-icon>add</mat-icon>
+      Add Student
+    </button>
+
+    <div class="search-container">
+      <input pInputText autocomplete="off" #searchbox type="text" name="search" placeholder="Search" (keyup)="applyFilter(searchbox.value)">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+  </div>
   <div class="table-container">
     <p-card class="mat-elevation-z8" >
-
-      <div class="button-search-container">
-        <button class="button-addsupplier" pButton color="primary" (click)="showDialog()">
-          <mat-icon>add</mat-icon>
-          Add Student
-        </button>
-
-        <div class="search-container">
-          <input pInputText autocomplete="off" #searchbox type="text" name="search" placeholder="Search" (keyup)="applyFilter(searchbox.value)">
-          <i class="fas fa-search search-icon"></i>
-        </div>
-
-      </div>
-      <p-table class="p-table-style"
+      <p-table
       [value]="dataSource"
       [paginator]="true"
       [alwaysShowPaginator]="true"
@@ -24,36 +24,33 @@
       [lazy]="true"
       (onLazyLoad)="onPaginate($event)"
       [defaultSortOrder]="1"
-      (sort)="onSort($event)">
+    >
       <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="student_name">Student Name <p-sortIcon field="student_name"></p-sortIcon></th>
-            <th pSortableColumn="address">Address <p-sortIcon field="address"></p-sortIcon></th>
-            <th pSortableColumn="contact_no">Contact No. <p-sortIcon field="contact_no"></p-sortIcon></th>
-            <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
-            <th pSortableColumn="civil_status">Civil Status <p-sortIcon field="civil_status"></p-sortIcon></th>
-            <th pSortableColumn="emergency_contact_no">Emergency Contact No. <p-sortIcon field="emergency_contact_no"></p-sortIcon></th>
-            <th pSortableColumn="last_school_attended">Last School Attended <p-sortIcon field="last_school_attended"></p-sortIcon></th>
-            <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-element>
-          <tr class="p-row" (click)="getStudentDetails(element)">
-            <td>{{ element.student_name }}</td>
-            <td>{{ element.address }}</td>
-            <td>{{ element.contact_no }}</td>
-            <td>{{ element.email }}</td>
-            <td>{{ element.civil_status }}</td>
-            <td>{{ element.emergency_contact_no }}</td>
-            <td>{{ element.last_school_attended }}</td>
-            <td>{{ element.status }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+        <tr>
+          <th pSortableColumn="student_name">Student Name <p-sortIcon field="student_name"></p-sortIcon></th>
+          <th pSortableColumn="address">Address <p-sortIcon field="address"></p-sortIcon></th>
+          <th pSortableColumn="contact_no">Contact No. <p-sortIcon field="contact_no"></p-sortIcon></th>
+          <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+          <th pSortableColumn="civil_status">Civil Status <p-sortIcon field="civil_status"></p-sortIcon></th>
+          <th pSortableColumn="emergency_contact_no">Emergency Contact No. <p-sortIcon field="emergency_contact_no"></p-sortIcon></th>
+          <th pSortableColumn="last_school_attended">Last School Attended <p-sortIcon field="last_school_attended"></p-sortIcon></th>
+          <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-element>
+        <tr (click)="getStudentDetails(element)">
+          <td>{{ element.student_name }}</td>
+          <td>{{ element.address }}</td>
+          <td>{{ element.contact_no }}</td>
+          <td>{{ element.email }}</td>
+          <td>{{ element.civil_status }}</td>
+          <td>{{ element.emergency_contact_no }}</td>
+          <td>{{ element.last_school_attended }}</td>
+          <td>{{ element.status }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
 
-      <!-- <mat-paginator [length]="total" [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize" [pageIndex]="pageNo -1"
-              aria-label="Select page" (page)="onPaginate($event)" #paginator>
-      </mat-paginator> -->
 
       </p-card>
 
@@ -67,117 +64,76 @@
       <div class="flex-container padding">
       <div>
         <form [formGroup]="piForm">
-      <div class="flex-box">
-        <div class="flex align-items-center gap-3 mb-3 grid-item">
-          <label for="username" class="font-semibold w-6rem">Complete Name*</label>
-          <input pInputText [(ngModel)]="completename" formControlName="cnCtrl" id="username" class="flex-auto" autocomplete="off"/>
-          <div *ngIf="piForm.get('cnCtrl')?.invalid && (piForm.get('cnCtrl')?.dirty || piForm.get('cnCtrl')?.touched)" class="error-message">
-            {{ invalidName }}
+          <div class="flex-box">
+            <div class="flex align-items-center gap-3 mb-3 grid-item">
+              <label for="username" class="font-semibold w-6rem">Complete Name*</label>
+              <input pInputText formControlName="cnCtrl" id="username" class="flex-auto" autocomplete="off"/>
+              <div *ngIf="piForm.get('cnCtrl')?.invalid && (piForm.get('cnCtrl')?.dirty || piForm.get('cnCtrl')?.touched)" class="error-message">
+                {{ invalidName }}
+              </div>
+            </div>
+
+            <div class="flex align-items-center gap-3 mb-3 address grid-item">
+              <label for="address" class="font-semibold w-6rem">Complete Address*</label>
+              <input formControlName="caCtrl" pInputText id="address" class="flex-auto" autocomplete="off" />
+              <div *ngIf="piForm.get('caCtrl')?.invalid && (piForm.get('caCtrl')?.dirty || piForm.get('caCtrl')?.touched)" class="error-message">
+                {{ invalidAddress }}
+              </div>
+            </div>
+
+
+            <div class="flex-contact flex grid-item">
+              <label>Contact No. *</label>
+              <p-inputMask mask="99999999999" formControlName="pnCtrl" placeholder="99999999999"/>
+              <div *ngIf="piForm.get('pnCtrl')?.invalid && (piForm.get('pnCtrl')?.dirty || piForm.get('pnCtrl')?.touched)" class="error-message">
+                {{ invalidPhoneNumber }}
+              </div>
+            </div>
           </div>
-        </div>
+            <div class="flex-box">
+              <div class="flex align-items-center gap-3 mb-3 grid-item">
+                <label for="username" class="font-semibold w-6rem">Email Address *</label>
+                <input formControlName="eaCtrl" pInputText id="email" class="flex-auto" autocomplete="off" />
+                <div *ngIf="piForm.get('eaCtrl')?.invalid && (piForm.get('eaCtrl')?.dirty || piForm.get('eaCtrl')?.touched)" class="error-message">
+                  {{ invalidEmail }}
+                </div>
+              </div>
 
-      <div class="flex align-items-center gap-3 mb-3 address grid-item">
-        <label for="address" class="font-semibold w-6rem">Complete Address*</label>
-        <input [(ngModel)]="fulladdress" formControlName="caCtrl" pInputText id="address" class="flex-auto" autocomplete="off" />
-        <div *ngIf="piForm.get('caCtrl')?.invalid && (piForm.get('caCtrl')?.dirty || piForm.get('caCtrl')?.touched)" class="error-message">
-          {{ invalidAddress }}
-        </div>
-    </div>
+              <div class="card flex justify-content-center grid-item">
+                <label>Civil Status *</label>
+                <p-dropdown [options]="civilStatusOptions" formControlName="csCtrl" [checkmark]="true" class="dropdown-field"></p-dropdown>
+              </div>
 
-    <div class="flex-contact flex grid-item">
-      <label>Contact No. *</label>
-    <p-inputMask
-    mask="99999999999"
-    [(ngModel)]="contactno"
-    formControlName="pnCtrl"
-    placeholder="99999999999"/>
-    <div *ngIf="piForm.get('pnCtrl')?.invalid && (piForm.get('pnCtrl')?.dirty || piForm.get('pnCtrl')?.touched)" class="error-message">
-      {{ invalidPhoneNumber }}
-    </div>
-  </div>
-</div>
+              <div class="flex-contact flex grid-item">
+                <label>Emergency Contact *</label>
+                <p-inputMask mask="99999999999" formControlName="ecCtrl" placeholder="99999999999"/>
+                <div *ngIf="piForm.get('ecCtrl')?.invalid && (piForm.get('ecCtrl')?.dirty || piForm.get('ecCtrl')?.touched)" class="error-message">
+                  {{ invalidPhoneNumber }}
+                </div>
+              </div>
 
-  <div class="flex-box">
-  <div class="flex align-items-center gap-3 mb-3 grid-item">
-    <label for="username" class="font-semibold w-6rem">Email Address *</label>
-    <input [(ngModel)]="email" formControlName="eaCtrl" pInputText id="email" class="flex-auto" autocomplete="off" />
-    <div *ngIf="piForm.get('eaCtrl')?.invalid && (piForm.get('eaCtrl')?.dirty || piForm.get('eaCtrl')?.touched)" class="error-message">
-      {{ invalidEmail }}
-    </div>
-  </div>
+              <div class="flex-box">
+                <div class="flex align-items-center gap-3 mb-3 grid-item school-attended">
+                  <label for="lastschoolattended" class="font-semibold w-6rem">Last School Attended *</label>
+                  <input formControlName="lsaCtrl" pInputText id="schoolattended" class="flex-auto" autocomplete="off"/>
+                  <div *ngIf="piForm.get('lsaCtrl')?.invalid && (piForm.get('lsaCtrl')?.dirty || piForm.get('lsaCtrl')?.touched)" class="error-message">
+                    {{ invalidLastSchoolAttended }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
 
-  <div class="card flex justify-content-center grid-item">
-    <label>Civil Status *</label>
-    <p-dropdown
-        [options]="civilStatusOptions"
-        [(ngModel)]="selectedStatus"
-        formControlName="csCtrl"
-        [checkmark]="true"
-        class="dropdown-field">
-    </p-dropdown>
-  </div>
-
-  <div class="flex-contact flex grid-item">
-    <label>Emergency Contact *</label>
-  <p-inputMask
-  mask="99999999999"
-  [(ngModel)]="emergencycontactno"
-  placeholder="99999999999"
-  formControlName="ecCtrl"/>
-  <div *ngIf="piForm.get('ecCtrl')?.invalid && (piForm.get('ecCtrl')?.dirty || piForm.get('ecCtrl')?.touched)" class="error-message">
-    {{ invalidPhoneNumber }}
-  </div>
-</div>
-
-<div class="flex-box">
-  <div class="flex align-items-center gap-3 mb-3 grid-item school-attended">
-    <label for="lastschoolattended" class="font-semibold w-6rem">Last School Attended *</label>
-    <input [(ngModel)]="schoolattended" formControlName="lsaCtrl" pInputText id="schoolattended" class="flex-auto" autocomplete="off"/>
-    <div *ngIf="piForm.get('lsaCtrl')?.invalid && (piForm.get('lsaCtrl')?.dirty || piForm.get('lsaCtrl')?.touched)" class="error-message">
-      {{ invalidAddress }}
-    </div>
-  </div>
-  </div>
-<br/>
-
-</div>
-</form>
 </div>
       </div>
 
       <div class="flex justify-content-end gap-2 button-container">
           <p-button label="Cancel" class="cancel" severity="secondary" (click)="visible = false" />
-          <p-button label="Next" [disabled]="piForm.invalid" (click)="visible = false" (onClick)="addStudent()"/>
+          <p-button label="Next" class="next" [disabled]="piForm.invalid" (click)="visible = false" (onClick)="addStudent()"/>
       </div>
     </div>
     </ng-template>
   </p-stepperPanel>
-
-  <!-- <p-stepperPanel header="LIST OF REQUIREMENTS SUBMITTED">
-    <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
-      <div class="card flex justify-content-center">
-        <div class="flex flex-column gap-2">
-            <div *ngFor="let category of categories" class="field-checkbox">
-                <p-checkbox
-                    [(ngModel)]="listOfRequirements"
-                    [label]="category.name"
-                    name="group"
-                    [value]="category" />
-            </div>
-        </div>
-    </div>
-    <div class="flex justify-content-end gap-2 button-container">
-      <p-button label="Back" class="cancel" severity="secondary" (click)="visible = false" (onClick)="prevCallback.emit()"/>
-      <p-button label="Next" (click)="visible = false" (onClick)="nextCallback.emit()"/>
-  </div>
-    </ng-template>
-  </p-stepperPanel> -->
-<!--
-  <p-stepperPanel header="Done">
-    <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
-
-    </ng-template>
-  </p-stepperPanel> -->
 
   </p-stepper>
   </p-dialog>

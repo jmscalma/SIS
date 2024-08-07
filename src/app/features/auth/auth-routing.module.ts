@@ -11,8 +11,8 @@ const routes: Routes = [
   {path: 'change-password', component: ForceChangePasswordComponent},
   {path: 'reset-password', component: ResetPasswordComponent},
   {path: 'forgot-password', component: ForgotPasswordComponent}
-  ];
-
+  ]; 
+                                                                                                          
 @NgModule({
   declarations: [],
   imports: [

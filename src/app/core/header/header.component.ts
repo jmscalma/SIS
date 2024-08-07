@@ -8,7 +8,6 @@ import { AuthService } from '../../features/auth/auth.service';
 import { ResetPasswordComponent } from '../../features/auth/reset-password/reset-password.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -36,13 +35,12 @@ export class HeaderComponent {
   }
 
   resetPasswordClick() {
-    // this.router.navigate(['/reset-password'])
-    // this.dialog.open(ResetPasswordComponent)
     this.ref = this.dialogService.open(ResetPasswordComponent, {
-      // header: 'CHANGE PASSWORD',
       width: '30%',
       height: '90%',
-      data: {dialogRef: this.ref }
+    });
+    this.ref.onClose.subscribe(() => {
+      console.log('Dialog closed');
     });
   }
 

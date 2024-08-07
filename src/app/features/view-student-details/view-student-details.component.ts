@@ -11,6 +11,7 @@ import { AddressValidator,
 } from '../../shared/validators/validators';
 import { ERROR_MESSAGES } from '../../shared/constants/constants';
 import { SuccessDialogComponent } from '../../shared/dialog/success-dialog/success-dialog.component';
+import { ErrorDialogComponent } from '../../shared/dialog/error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-view-student-details',
@@ -110,20 +111,18 @@ export class ViewStudentDetailsComponent implements OnInit{
   getStudentById(studentId: number) {
     console.log('Fetching student details for ID:', studentId);
 
-    // Simulate API call or logic to fetch additional student details based on studentId
-    // Replace with actual API call based on your service implementation
     this.service.getStudentById(studentId).subscribe(
       (data) => {
         console.log('API Response:', data);
-        this.studentid = data.data[0].student_id;
-        this.completename = data.data[0].student_name;
-        this.fulladdress = data.data[0].address;
-        this.contactno = data.data[0].contact_no;
-        this.email = data.data[0].email;
-        this.civilstatus = data.data[0].civil_status;
-        this.emergencycontactno = data.data[0].emergency_contact_no;
-        this.schoolattended = data.data[0].last_school_attended;
-        this.status = data.data[0].status;
+        this.studentid = data.data[0][0].student_id;
+        this.completename = data.data[0][0].student_name;
+        this.fulladdress = data.data[0][0].address;
+        this.contactno = data.data[0][0].contact_no;
+        this.email = data.data[0][0].email;
+        this.civilstatus = data.data[0][0].civil_status;
+        this.emergencycontactno = data.data[0][0].emergency_contact_no;
+        this.schoolattended = data.data[0][0].last_school_attended;
+        this.status = data.data[0][0].status;
 
         this.piForm.patchValue({
           snCtrl: this.completename,
@@ -143,8 +142,6 @@ export class ViewStudentDetailsComponent implements OnInit{
       }
     );
   }
-
-
 
   editStudentDetails(reverseButtons: boolean) {
     const confirmDialogRef = this.dialogService.open(ConfirmDialogComponent, {
@@ -184,8 +181,9 @@ export class ViewStudentDetailsComponent implements OnInit{
 
       this.service.updateStudentDetails(regdata).subscribe(
         (data) => {
-          if (data.message === 'No changes made.') {
-            // this.openErrorDialog(data.message);
+          if (data.message === 'Could not update student, please try again.') {
+            console.log('Update Failed')
+            this.showErrorDialog('Failed to update student. Please Try Again')
           } else {
             this.showDialog();
             this.closeDialog();
@@ -212,10 +210,10 @@ disableStudentById(reverseButtons: boolean) {
     disabled_by: this.LoginId
   }
 
-  confirmDialogRef.onClose.subscribe((result: boolean) => {
+confirmDialogRef.onClose.subscribe((result: boolean) => {
     if (result) {
       let id = this.service.student_id;
-      this.service.disableStudent(regdata, id).subscribe((data) => {
+      this.service.disableStudent(id, regdata).subscribe((data) => {
         console.log('Disable Response:', data);
         this.showDialog();
         this.closeDialog();
@@ -230,11 +228,6 @@ enableCustomerById(reverseButtons: boolean) {
     width: '360px',
     data: { message: 'Are you sure you want to activate this student?', reverseButtons: reverseButtons }
   });
-
-  // const regdata = {
-
-  //   enabled_by: this.LoginId
-  // }
 
   confirmDialogRef.onClose.subscribe((result: boolean) => {
     if (result) {
@@ -253,6 +246,15 @@ enableCustomerById(reverseButtons: boolean) {
     header: 'SUCCESS',
     width: '20%',
     height: '30%'
+  });
+}
+
+showErrorDialog(errorMessage: string) {
+  const ref = this.dialogService.open(ErrorDialogComponent, {
+    data: { message: errorMessage },
+    header: 'Error',
+    width: '25%',
+    height: '40%'
   });
 }
 

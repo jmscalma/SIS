@@ -25,6 +25,7 @@
                      id="username"
                      name="username"
                      ngModel [(ngModel)]="username"
+                     autocomplete="username"
                      required>
           </div>
 
@@ -38,19 +39,16 @@
                 id="password"
                 name="password"
                 [(ngModel)]="password"
+                autocomplete="current-password"
                 #passwordField="ngModel"
                 [feedback]="false"
                 [toggleMask]="true"
               />
             </div>
           </div>
-
               <button pButton pRipple type="submit" (click)="login()">Login</button>
           </div>
           </form>
-          <div class="forgot-message">
-            <span>Forgot Password? <a class="click-here" (click)="forgotPasswordDialog()">Click Here</a></span>
-          </div>
 
       </div>
   </div>

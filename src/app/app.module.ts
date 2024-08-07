@@ -64,6 +64,9 @@ import { MainDashboardComponent } from './features/main-dashboard/main-dashboard
 import { ConfirmDialogComponent } from './shared/dialog/confirm-dialog/confirm-dialog.component';
 import { SuccessDialogComponent } from './shared/dialog/success-dialog/success-dialog.component';
 import { ErrorDialogComponent } from './shared/dialog/error-dialog/error-dialog.component';
+import { ChartModule } from 'primeng/chart';
+import { TreeTableModule } from 'primeng/treetable';
+
 
 @NgModule({
   declarations: [
@@ -79,6 +82,7 @@ import { ErrorDialogComponent } from './shared/dialog/error-dialog/error-dialog.
   ],
 
   imports: [
+    ChartModule,
     MatFormField,
     MatSortModule,
     MatNativeDateModule,
@@ -125,7 +129,8 @@ import { ErrorDialogComponent } from './shared/dialog/error-dialog/error-dialog.
     MatButtonModule,
     AuthModule,
     MatTableModule,
-    PaginatorModule
+    PaginatorModule,
+    TreeTableModule
   ],
 
   providers: [MessageService, ConfirmationService, provideAnimationsAsync(), provideNativeDateAdapter(), DialogService, DynamicDialogRef, DynamicDialogConfig],

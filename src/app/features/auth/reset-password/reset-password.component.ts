@@ -47,6 +47,7 @@ export class ResetPasswordComponent implements OnInit{
     }
   }
 
+
   async changePassword(form: any) {
     if (form.valid) {
       try {
@@ -55,7 +56,6 @@ export class ResetPasswordComponent implements OnInit{
           newPassword: this.newPassword
         });
         this.successDialog();
-        this.closeDialog();
       } catch (err) {
         this.showErrorDialog('Failed to update Password');
         this.errorMessage = 'Failed to update password. Please try again.';
@@ -67,11 +67,18 @@ export class ResetPasswordComponent implements OnInit{
   }
 
   successDialog() {
-    this.dialogService.open(SuccessDialogComponent, {
+    this.ref = this.dialogService.open(SuccessDialogComponent, {
       header: 'SUCCESS',
-      width: '20%',
+      width: '30%',
       height: '30%'
     });
+
+    // Close the dialog after 2 seconds (or any other logic you prefer)
+    setTimeout(() => {
+      if (this.ref) {
+        this.ref.close();
+      }
+    }, 1000); // Adjust time as necessary
   }
 
   showErrorDialog(errorMessage: string) {
@@ -81,15 +88,6 @@ export class ResetPasswordComponent implements OnInit{
       width: '25%',
       height: '40%'
     });
-  }
-
-  closeDialog() {
-    console.log("Closing dialog", this.ref);
-    if (this.ref) {
-      this.ref.close();
-    } else {
-      console.error("DynamicDialogRef is not available");
-    }
   }
 
 }
